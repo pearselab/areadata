@@ -1,0 +1,5 @@
+# History files
+.Rhistory
+
+# config file with api key
+config.yml
