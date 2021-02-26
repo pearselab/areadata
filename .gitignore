@@ -3,3 +3,6 @@
 
 # config file with api key
 config.yml
+
+# data files
+/data/*
