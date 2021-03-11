@@ -5,4 +5,4 @@
 config.yml
 
 # data files
-/data/*
+/data/*.grib
