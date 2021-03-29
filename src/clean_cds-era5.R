@@ -4,11 +4,9 @@
 
 library(optparse)
 library(raster)
-library(velox)
 library(sf)
 library(tidyr)
 library(rgdal)
-library(parallel)
 
 # command line arguments options
 
@@ -47,15 +45,15 @@ temp <- rgdal::readGDAL("data/cds-temp-dailymean.grib")
     sp.df@data <- sp.df@data[,i,drop=FALSE]
     return(sp.df)
 }
-temp <- lapply(seq_along(dates), function(i, sp.df) velox(raster::rotate(raster(.drop.col(i, sp.df)))), sp.df=temp)
+temp <- lapply(seq_along(dates), function(i, sp.df) raster::rotate(raster(.drop.col(i, sp.df))), sp.df=temp)
 # humid <- lapply(seq_along(days), function(i, sp.df) velox(raster::rotate(raster(.drop.col(i, sp.df)))), sp.df=humid)
 # uv <- lapply(seq_along(days), function(i, sp.df) velox(raster::rotate(raster(.drop.col(i, sp.df)))), sp.df=uv)
 #
-# # Do work; format and save
-.avg.wrapper <- function(climate, region)
-    return(do.call(cbind, mcMap(
-                              function(r) r$extract(region, small = TRUE, fun = function(x) median(x, na.rm = TRUE)),
-                              climate)))
+# Functions to run climate averaging
+.avg.wrapper <- function(shapefile, climate){
+    # average the climate variable across each object in the shapefile
+    return(raster::extract(x = climate, y = shapefile, fun=function(x, na.rm = TRUE)median(x, na.rm = TRUE), small = TRUE))
+}
 .give.names <- function(output, rows, cols, rename=FALSE){
     dimnames(output) <- list(rows, cols)
     if(rename)
@@ -63,32 +61,19 @@ temp <- lapply(seq_along(dates), function(i, sp.df) velox(raster::rotate(raster(
     return(output)
 }
 
+# do work
+c.temp <- sapply(temp, function(x) .avg.wrapper(shapefile = countries, climate = x))
+s.temp <- sapply(temp, function(x) .avg.wrapper(shapefile = states, climate = x))
 
+# format and save
 saveRDS(
-    .give.names(.avg.wrapper(temp, countries), countries$NAME_0, dates, TRUE),
+    .give.names(c.temp, countries$NAME_0, dates, TRUE),
     paste("output/temp-dailymean-countries-", opt$out, ".RDS", sep = "")
 )
 saveRDS(
-    .give.names(.avg.wrapper(temp, states), states$GID_1, dates),
+    .give.names(s.temp, states$GID_1, dates),
     paste("output/temp-dailymean-states-", opt$out, ".RDS", sep = "")
 )
 
 # Save a file with the date that these data have been updated to
 write.table(max(all_dates$date), "output/update-datestamp.txt")
-
-# saveRDS(
-#     .give.names(.avg.wrapper(humid, countries), countries$NAME_0, days, TRUE),
-#     "clean-data/humid-dailymean-countries.RDS"
-# )
-# saveRDS(
-#     .give.names(.avg.wrapper(humid, states), states$GID_1, days),
-#     "clean-data/humid-dailymean-states.RDS"
-# )
-# saveRDS(
-#     .give.names(.avg.wrapper(uv, countries), countries$NAME_0, days, TRUE),
-#     "clean-data/uv-dailymean-countries.RDS"
-# )
-# saveRDS(
-#     .give.names(.avg.wrapper(uv, states), states$GID_1, days),
-#     "clean-data/uv-dailymean-states.RDS"
-# )
