@@ -73,16 +73,30 @@ print("averaging across regions...")
 c.temp <- sapply(temp, function(x) .avg.wrapper(shapefile = countries, climate = x))
 s.temp <- sapply(temp, function(x) .avg.wrapper(shapefile = states, climate = x))
 
+# format
+c.temp <- .give.names(c.temp, countries$NAME_0, dates, TRUE)
+s.temp <- .give.names(s.temp, states$GID_1, dates)
+
+print("merging with old data...")
+# read older climate data
+old.c.temp <- readRDS("output/temp-dailymean-countries-cleaned.RDS")
+old.s.temp <- readRDS("output/temp-dailymean-states-cleaned.RDS")
+
+# merge two climate matrices together
+c.temp <- cbind(old.c.temp, c.temp[, !(colnames(c.temp) %in% colnames(old.c.temp))])
+s.temp <- cbind(old.s.temp, s.temp[, !(colnames(s.temp) %in% colnames(old.s.temp))])
+
 # format and save
 print("saving output files...")
-saveRDS(
-    .give.names(c.temp, countries$NAME_0, dates, TRUE),
-    paste("output/temp-dailymean-countries-", opt$out, ".RDS", sep = "")
+saveRDS(c.temp, paste("output/temp-dailymean-countries-", opt$out, ".RDS", sep = "")
 )
-saveRDS(
-    .give.names(s.temp, states$GID_1, dates),
-    paste("output/temp-dailymean-states-", opt$out, ".RDS", sep = "")
+saveRDS(s.temp, paste("output/temp-dailymean-states-", opt$out, ".RDS", sep = "")
 )
+
+# save a backup of the older data
+enddate <- max(colnames(old.c.temp))
+saveRDS(old.c.temp, paste("output/temp-dailymean-countries-", enddate, ".RDS", sep = ""))
+saveRDS(old.s.temp, paste("output/temp-dailymean-states-", enddate, ".RDS", sep = ""))
 
 # Save a file with the date that these data have been updated to
 write.table(max(all_dates$date), "output/update-datestamp.txt")
