@@ -99,4 +99,4 @@ saveRDS(old.c.temp, paste("output/temp-dailymean-countries-", enddate, ".RDS", s
 saveRDS(old.s.temp, paste("output/temp-dailymean-states-", enddate, ".RDS", sep = ""))
 
 # Save a file with the date that these data have been updated to
-write.table(max(all_dates$date), "output/update-datestamp.txt")
+write.table(max(all_dates[!is.na(all_dates$date),]$date), "output/update-datestamp.txt")

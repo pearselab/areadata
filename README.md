@@ -27,11 +27,11 @@ Currently this is available for temperature only.
 
 ## Usage
 
-1. First run the initial setup script from the main directory: bash get-climate-data-first-setup.sh
+1. First run the initial setup script from the main directory: bash src/get-climate-data-first-setup.sh
    * By default this will download and clean data for Jan 2020. You could modify the starting date if you wish by changing the arguments in the calls to the python and R scripts.
 
 2. From then, you can update the repository to any month you wish using the update-climate-data.sh script and specifying a range of dates.
-   * e.g. bash update-climate-data.sh -y 2020 -m '02 03 04'
+   * e.g. src/bash update-climate-data.sh -y 2020 -m '02 03 04'
    * It's suggested not to do too many dates at once, as this will result in a massive download which will take forever.
    * You can check what date the data was previously updated to in the update-datestamp.txt file in /output before choosing new dates to update to.
    
