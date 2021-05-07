@@ -4,17 +4,19 @@
 # Tom Smith 2021
 
 # parse the command line options
-while getopts y:m: flag
+while getopts y:m:c: flag
 do
     case "${flag}" in
         y) year=${OPTARG};;
         m) months=${OPTARG};;
+        c) cores=${OPTARG};;
     esac
 done
 
 echo "Updating climate data for:"
 echo "Year: $year";
 echo "Months: $months";
+echo "Using $cores cores in R";
 
 # turn months into a comma separated list for R later
 monthlist=$(echo "$months" | tr ' ' ,)
@@ -30,6 +32,6 @@ cdo daymean data/cds-temp.grib data/cds-temp-dailymean.grib
 
 echo "Average daily climate data across spatial regions"
 
-Rscript src/update-cds-era5.R -y $year -m $monthlist, -o cleaned
+Rscript src/update-cds-era5.R -y $year -m $monthlist, -o cleaned -c $cores
 
 echo "... Finished averaging across regions! Files written to output directory!"

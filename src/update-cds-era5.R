@@ -18,11 +18,17 @@ option_list = list(
     make_option(c("-d", "--days"), type="character", default="all", 
                 help="comma separated list of days", metavar="character"),
     make_option(c("-o", "--out"), type="character", default="output", 
-                help="output file name [default= %default]", metavar="character")
+                help="output file name [default= %default]", metavar="character"),
+    make_option(c("-c", "--cores"), type="integer", default=1, 
+                help="number of cores to use for parallelised code", metavar="number")
 ); 
 
 opt_parser = OptionParser(option_list=option_list);
 opt = parse_args(opt_parser)
+
+# set number of cores
+options(mc.cores = opt$cores)
+print(paste("Cores =", opt$cores, sep = " "))
 
 # pull the dates out into numeric strings
 years <- as.numeric(strsplit(opt$years, ",")[[1]])
@@ -56,22 +62,38 @@ temp <- lapply(seq_along(dates), function(i, sp.df) raster::rotate(raster(.drop.
 # humid <- lapply(seq_along(days), function(i, sp.df) velox(raster::rotate(raster(.drop.col(i, sp.df)))), sp.df=humid)
 # uv <- lapply(seq_along(days), function(i, sp.df) velox(raster::rotate(raster(.drop.col(i, sp.df)))), sp.df=uv)
 #
-# Functions to run climate averaging
-.avg.wrapper <- function(shapefile, climate){
+
+######################################
+# Functions to run climate averaging #
+######################################
+
+.avg.climate <- function(shapefile, x){
     # average the climate variable across each object in the shapefile
-    return(raster::extract(x = climate, y = shapefile, fun=function(x, na.rm = TRUE)median(x, na.rm = TRUE), small = TRUE))
+    return(raster::extract(x = x, y = shapefile, fun=function(x, na.rm = TRUE)median(x, na.rm = TRUE), small = TRUE))
 }
+
+.avg.wrapper <- function(climate, region){
+    # use parallelised code to run this for a list of temperature data
+    return(do.call(cbind, mcMap(
+        function(x) .avg.climate(shapefile=region, x),
+        climate)))
+}
+
 .give.names <- function(output, rows, cols, rename=FALSE){
+    # add names to the climate averaging output
     dimnames(output) <- list(rows, cols)
     if(rename)
         rownames(output) <- gsub(" ", "_", rownames(output))
     return(output)
 }
 
-# do work
+################
+# run the code #
+################
+
 print("averaging across regions...")
-c.temp <- sapply(temp, function(x) .avg.wrapper(shapefile = countries, climate = x))
-s.temp <- sapply(temp, function(x) .avg.wrapper(shapefile = states, climate = x))
+c.temp <- .avg.wrapper(temp, countries)
+s.temp <- .avg.wrapper(temp, states)
 
 # format
 c.temp <- .give.names(c.temp, countries$NAME_0, dates, TRUE)
