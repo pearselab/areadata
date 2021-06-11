@@ -4,34 +4,47 @@
 # Tom Smith 2021
 
 # parse the command line options
-while getopts y:m:c: flag
+while getopts y:m:c:v: flag
 do
     case "${flag}" in
         y) year=${OPTARG};;
         m) months=${OPTARG};;
         c) cores=${OPTARG};;
+        v) climvar=${OPTARG};;
     esac
 done
 
 echo "Updating climate data for:"
-echo "Year: $year";
-echo "Months: $months";
+echo "Climate variable(s): $climvar";
+echo "Year(s): $year";
+echo "Month(s): $months";
 echo "Using $cores cores in R";
 
-# turn months into a comma separated list for R later
+# turn months and climate variables into a comma separated list for R later
 monthlist=$(echo "$months" | tr ' ' ,)
-
+climatelist=$(echo "$climvar" | tr ' ' ,)
 
 echo "Run cds download script over a selected date range"
 
-python3 src/cds-era5-args.py -y $year -m $months -o cds-temp
+python3 src/cds-era5-args.py -y $year -m $months -c $climvar
 
 echo "Average across single days"
+# use wildcards to check if climvar string contains each variable
 
-cdo daymean data/cds-temp.grib data/cds-temp-dailymean.grib
+if [[ "$climvar" == *"temperature"* ]]; then
+  cdo daymean data/cds-temp.grib data/cds-temp-dailymean.grib
+fi
+
+if [[ "$climvar" == *"humidity"* ]]; then
+  cdo daymean data/cds-humid.grib data/cds-humid-dailymean.grib
+fi
+
+if [[ "$climvar" == *"uv"* ]]; then
+  cdo daymean data/cds-uv.grib data/cds-uv-dailymean.grib
+fi
 
 echo "Average daily climate data across spatial regions"
 
-Rscript src/update-cds-era5.R -y $year -m $monthlist, -o cleaned -c $cores
+Rscript src/update-cds-era5.R -y $year -m $monthlist, -v $climatelist -c $cores
 
 echo "... Finished averaging across regions! Files written to output directory!"

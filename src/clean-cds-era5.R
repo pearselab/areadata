@@ -18,8 +18,6 @@ option_list = list(
                 help="comma separated list of months", metavar="character"),
     make_option(c("-d", "--days"), type="character", default="all", 
                 help="comma separated list of days", metavar="character"),
-    make_option(c("-o", "--out"), type="character", default="output", 
-                help="output file name [default= %default]", metavar="character"),
     make_option(c("-c", "--cores"), type="integer", default=1, 
                 help="number of cores to use for parallelised code", metavar="number")
 ); 
@@ -53,15 +51,15 @@ print("loading climate data...")
 # Load climate data and subset into rasters for each day of the year
 dates <- as.character(all_dates[!is.na(all_dates$date),]$date)
 temp <- rgdal::readGDAL("data/cds-temp-dailymean.grib")
-# humid <- rgdal::readGDAL("raw-data/gis/cds-era5-humid-dailymean.grib")
-# uv <- rgdal::readGDAL("raw-data/gis/cds-era5-uv-dailymean.grib")
+humid <- rgdal::readGDAL("data/cds-humid-dailymean.grib")
+uv <- rgdal::readGDAL("data/cds-uv-dailymean.grib")
 .drop.col <- function(i, sp.df){
     sp.df@data <- sp.df@data[,i,drop=FALSE]
     return(sp.df)
 }
 temp <- lapply(seq_along(dates), function(i, sp.df) raster::rotate(raster(.drop.col(i, sp.df))), sp.df=temp)
-# humid <- lapply(seq_along(days), function(i, sp.df) velox(raster::rotate(raster(.drop.col(i, sp.df)))), sp.df=humid)
-# uv <- lapply(seq_along(days), function(i, sp.df) velox(raster::rotate(raster(.drop.col(i, sp.df)))), sp.df=uv)
+humid <- lapply(seq_along(days), function(i, sp.df) velox(raster::rotate(raster(.drop.col(i, sp.df)))), sp.df=humid)
+uv <- lapply(seq_along(days), function(i, sp.df) velox(raster::rotate(raster(.drop.col(i, sp.df)))), sp.df=uv)
 
 ######################################
 # Functions to run climate averaging #
@@ -95,17 +93,37 @@ print("averaging across regions...")
 c.temp <- .avg.wrapper(temp, countries)
 s.temp <- .avg.wrapper(temp, states)
 
+c.humid <- .avg.wrapper(humid, countries)
+s.humid <- .avg.wrapper(humid, states)
+
+c.uv <- .avg.wrapper(uv, countries)
+s.uv <- .avg.wrapper(uv, states)
 
 # format and save
 print("saving output files...")
 saveRDS(
     .give.names(c.temp, countries$NAME_0, dates, TRUE),
-    paste("output/temp-dailymean-countries-", opt$out, ".RDS", sep = "")
+    "output/temp-dailymean-countries-cleaned.RDS"
 )
 saveRDS(
     .give.names(s.temp, states$GID_1, dates),
-    paste("output/temp-dailymean-states-", opt$out, ".RDS", sep = "")
+    "output/temp-dailymean-states-cleaned.RDS"
 )
-
+saveRDS(
+    .give.names(c.humid, countries$NAME_0, dates, TRUE),
+    "output/humid-dailymean-countries-cleaned.RDS"
+)
+saveRDS(
+    .give.names(s.humid, states$GID_1, dates),
+    "output/humid-dailymean-states-cleaned.RDS"
+)
+saveRDS(
+    .give.names(c.uv, countries$NAME_0, dates, TRUE),
+    "output/uv-dailymean-countries-cleaned.RDS"
+)
+saveRDS(
+    .give.names(s.uv, states$GID_1, dates),
+    "output/uv-dailymean-states-cleaned.RDS"
+)
 # Save a file with the date that these data have been updated to
-write.table(max(all_dates$date), "output/update-datestamp.txt")
+# write.table(max(all_dates$date), "output/update-datestamp.txt") # this needs improvement
