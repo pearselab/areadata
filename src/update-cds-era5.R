@@ -7,6 +7,7 @@ library(raster)
 library(sf)
 library(tidyr)
 library(rgdal)
+library(parallel)
 
 # command line arguments options
 
@@ -130,7 +131,7 @@ if("temperature" %in% climvars){
 if("humidity" %in% climvars){
     print("loading humidity data...")
     # Load climate data and subset into rasters for each day of the year
-    humid <- rgdal::readGDAL("raw-data/gis/cds-era5-humid-dailymean.grib")
+    humid <- rgdal::readGDAL("data/cds-humid-dailymean.grib")
     humid <- lapply(seq_along(dates), function(i, sp.df) raster::rotate(raster(.drop.col(i, sp.df))), sp.df=humid)
     
     print("averaging humidity across regions...")
