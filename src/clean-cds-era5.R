@@ -1,5 +1,5 @@
 #!/usr/bin/env Rscript
-# --- Get average daily midday temperature/humidity/uv for countries/states --- #
+# --- Get average daily mean temperature/humidity/uv/precipitation for countries/states --- #
 #
 
 library(optparse)
@@ -53,6 +53,7 @@ dates <- as.character(all_dates[!is.na(all_dates$date),]$date)
 temp <- rgdal::readGDAL("data/cds-temp-dailymean.grib")
 humid <- rgdal::readGDAL("data/cds-humid-dailymean.grib")
 uv <- rgdal::readGDAL("data/cds-uv-dailymean.grib")
+precip <- rgdal::readGDAL("data/cds-precip-dailymean.grib")
 .drop.col <- function(i, sp.df){
     sp.df@data <- sp.df@data[,i,drop=FALSE]
     return(sp.df)
@@ -60,6 +61,7 @@ uv <- rgdal::readGDAL("data/cds-uv-dailymean.grib")
 temp <- lapply(seq_along(dates), function(i, sp.df) raster::rotate(raster(.drop.col(i, sp.df))), sp.df=temp)
 humid <- lapply(seq_along(days), function(i, sp.df) raster::rotate(raster(.drop.col(i, sp.df))), sp.df=humid)
 uv <- lapply(seq_along(days), function(i, sp.df) raster::rotate(raster(.drop.col(i, sp.df))), sp.df=uv)
+precip <- lapply(seq_along(days), function(i, sp.df) raster::rotate(raster(.drop.col(i, sp.df))), sp.df=precip)
 
 ######################################
 # Functions to run climate averaging #
@@ -99,6 +101,9 @@ s.humid <- .avg.wrapper(humid, states)
 c.uv <- .avg.wrapper(uv, countries)
 s.uv <- .avg.wrapper(uv, states)
 
+c.precip <- .avg.wrapper(precip, countries)
+s.precip <- .avg.wrapper(precip, states)
+
 # format and save
 print("saving output files...")
 saveRDS(
@@ -124,6 +129,14 @@ saveRDS(
 saveRDS(
     .give.names(s.uv, states$GID_1, dates),
     "output/uv-dailymean-states-cleaned.RDS"
+)
+saveRDS(
+    .give.names(c.precip, countries$NAME_0, dates, TRUE),
+    "output/precip-dailymean-countries-cleaned.RDS"
+)
+saveRDS(
+    .give.names(s.precip, states$GID_1, dates),
+    "output/precip-dailymean-states-cleaned.RDS"
 )
 # Save a file with the date that these data have been updated to
 # write.table(max(all_dates$date), "output/update-datestamp.txt") # this needs improvement

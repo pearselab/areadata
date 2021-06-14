@@ -135,3 +135,34 @@ if 'uv' in args.climvars:
 		'data/cds-uv.grib')
 	else:
 		print("Error: You didn't specify one of the required arguments - see --help for more details.")
+
+
+if 'precipitation' in args.climvars:
+	# need to have the specified arguments for the script to run
+	if args.years and args.months and dldays:
+		# do all the CDS stuff
+		c = cdsapi.Client()
+		
+		c.retrieve(
+		'reanalysis-era5-single-levels',
+		{
+			'product_type': 'reanalysis',
+			'variable': 'total_precipitation',
+			'year': args.years,
+			'month': args.months,
+			'day': dldays,
+			'time': [
+				'00:00', '01:00', '02:00',
+				'03:00', '04:00', '05:00',
+				'06:00', '07:00', '08:00',
+				'09:00', '10:00', '11:00',
+				'12:00', '13:00', '14:00',
+				'15:00', '16:00', '17:00',
+				'18:00', '19:00', '20:00',
+				'21:00', '22:00', '23:00',
+			],
+			'format': 'grib',
+		},
+		'data/cds-precip.grib')
+	else:
+		print("Error: You didn't specify one of the required arguments - see --help for more details.")

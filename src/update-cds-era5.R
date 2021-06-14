@@ -199,5 +199,41 @@ if("uv" %in% climvars){
 }
 
 
+# precipitation
+if("precipitation" %in% climvars){
+    print("loading precipitation data...")
+    # Load climate data and subset into rasters for each day of the year
+    precip <- rgdal::readGDAL("data/cds-precip-dailymean.grib")
+    precip <- lapply(seq_along(dates), function(i, sp.df) raster::rotate(raster(.drop.col(i, sp.df))), sp.df=precip)
+    
+    print("averaging precip across regions...")
+    c.precip <- .avg.wrapper(precip, countries)
+    s.precip <- .avg.wrapper(precip, states)
+    
+    # format
+    c.precip <- .give.names(c.precip, countries$NAME_0, dates, TRUE)
+    s.precip <- .give.names(s.precip, states$GID_1, dates)
+    
+    print("merging with old precip data...")
+    # read older climate data
+    old.c.precip <- readRDS("output/precip-dailymean-countries-cleaned.RDS")
+    old.s.precip <- readRDS("output/precip-dailymean-states-cleaned.RDS")
+    
+    # merge two climate matrices together
+    c.precip <- cbind(old.c.precip, c.precip[, !(colnames(c.precip) %in% colnames(old.c.precip))])
+    s.precip <- cbind(old.s.precip, s.precip[, !(colnames(s.precip) %in% colnames(old.s.precip))])
+    
+    # format and save
+    print("saving precip output files...")
+    saveRDS(c.precip, "output/precip-dailymean-countries-cleaned.RDS")
+    saveRDS(s.precip, "output/precip-dailymean-states-cleaned.RDS")
+    
+    # save a backup of the older data
+    enddate <- max(colnames(old.c.precip))
+    saveRDS(old.c.precip, paste("output/precip-dailymean-countries-", enddate, ".RDS", sep = ""))
+    saveRDS(old.s.precip, paste("output/precip-dailymean-states-", enddate, ".RDS", sep = ""))
+}
+
+
 # Save a file with the date that these data have been updated to
-write.table(max(all_dates[!is.na(all_dates$date),]$date), "output/update-datestamp.txt")
+# write.table(max(all_dates[!is.na(all_dates$date),]$date), "output/update-datestamp.txt") # improve this...

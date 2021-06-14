@@ -43,6 +43,10 @@ if [[ "$climvar" == *"uv"* ]]; then
   cdo daymean data/cds-uv.grib data/cds-uv-dailymean.grib
 fi
 
+if [[ "$climvar" == *"precipitation"* ]]; then
+  cdo daymean data/cds-precip.grib data/cds-precip-dailymean.grib
+fi
+
 echo "Average daily climate data across spatial regions"
 
 Rscript src/update-cds-era5.R -y $year -m $monthlist, -v $climatelist -c $cores
