@@ -3,3 +3,6 @@
 
 # data files
 /data/*.grib
+
+# nohup from Roy runs
+nohup.out
