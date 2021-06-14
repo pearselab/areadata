@@ -3,7 +3,9 @@
 
 RDS files with averaged climate variables across countries (GID.0) and states (GID.1) available in /output. 
 The most updated version's name is appended with -cleaned.RDS. 
-Currently this is available for temperature only.
+Currently this is available for temperature, humidity and UV.
+
+Metadata linking country/state names to GID identifiers given in /data/name-matching.csv
 
 # If you would like to set up this repositiory and run it yourself:
 
@@ -30,9 +32,9 @@ Currently this is available for temperature only.
 1. First run the initial setup script from the main directory: bash src/get-climate-data-first-setup.sh
    * By default this will download and clean data for Jan 2020. You could modify the starting date if you wish by changing the arguments in the calls to the python and R scripts.
 
-2. From then, you can update the repository to any month you wish using the update-climate-data.sh script and specifying a range of dates.
-   * e.g. src/bash update-climate-data.sh -y 2020 -m '02 03 04'
-   * It's suggested not to do too many dates at once, as this will result in a massive download which will take forever.
+2. From then, you can update the repository to any month you wish using the update-climate-data.sh script and specifying a range of dates, the climate variables you want to update, and the number of processor cores for R to use
+   * e.g. bash src/update-climate-data.sh -y 2020 -m '02 03 04' -c 4 -v 'temperature humidity uv'
+   * It's suggested not to do too many dates at once, as this will result in a large download that will take a long time and use up a lot of hard drive space.
    * You can check what date the data was previously updated to in the update-datestamp.txt file in /output before choosing new dates to update to.
    
 3. Save space by deleting the large .grib files in the data folder after cleaning
@@ -40,4 +42,4 @@ Currently this is available for temperature only.
 
 ## Future plan:
 
-Update to include extra climate variables and extra spatial units.
+Include future climate forecasts
