@@ -2,12 +2,7 @@
 # --- Get average daily midday temperature/humidity/uv for countries/states --- #
 #
 
-library(optparse)
-library(raster)
-library(sf)
-library(tidyr)
-library(rgdal)
-library(parallel)
+source("src/packages.R")
 
 # command line arguments options
 

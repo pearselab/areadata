@@ -2,12 +2,7 @@
 # --- Get average daily mean temperature/humidity/uv/precipitation for countries/states --- #
 #
 
-library(optparse)
-library(raster)
-library(sf)
-library(tidyr)
-library(rgdal)
-library(parallel)
+source("src/packages.R")
 
 # command line arguments options
 
