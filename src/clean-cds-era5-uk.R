@@ -59,8 +59,8 @@ uv <- lapply(seq_along(days), function(i, sp.df) raster::rotate(raster(.drop.col
 precip <- lapply(seq_along(days), function(i, sp.df) raster::rotate(raster(.drop.col(i, sp.df))), sp.df=precip)
 
 # get the UK spatial data into the correct projection
-UK_NUTS_reproj <- spTransform(UK_NUTS, temp[[1]]$crs)
-UK_LTLA_reproj <- spTransform(UK_LTLA, temp[[1]]$crs)
+UK_NUTS_reproj <- spTransform(UK_NUTS, crs(temp[[1]]))
+UK_LTLA_reproj <- spTransform(UK_LTLA, crs(temp[[1]]))
 
 ######################################
 # Functions to run climate averaging #
