@@ -1,13 +1,19 @@
-# test averaging across forecasting shapefiles
+# averaging across forecasting shapefiles
 
-library(optparse)
-library(raster)
-library(sf)
-library(tidyr)
-library(rgdal)
-library(parallel)
+source("src/packages.R")
+source("src/functions.R")
 
-options(mc.cores = 4)
+option_list = list(
+  make_option(c("-c", "--cores"), type="integer", default=1, 
+              help="number of cores to use for parallelised code", metavar="number")
+); 
+
+opt_parser = OptionParser(option_list=option_list);
+opt = parse_args(opt_parser)
+
+# set number of cores
+options(mc.cores = opt$cores)
+print(paste("Cores =", opt$cores, sep = " "))
 
 # Get countries and states
 print("loading shapefiles...")
@@ -33,31 +39,13 @@ for(i in seq_along(namelist)){
 }
 
 
-# functions
-.avg.climate <- function(shapefile, x){
-  # average the climate variable across each object in the shapefile
-  return(raster::extract(x = x, y = shapefile, fun=function(x, na.rm = TRUE)median(x, na.rm = TRUE), small = TRUE))
-}
-
-.avg.wrapper <- function(climate, region){
-  # use parallelised code to run this for a list of temperature data
-  return(do.call(cbind, mcMap(
-    function(x) .avg.climate(shapefile=region, x),
-    climate)))
-}
-
-.give.names <- function(output, rows, cols, rename=FALSE){
-  # add names to the climate averaging output
-  dimnames(output) <- list(rows, cols)
-  if(rename)
-    rownames(output) <- gsub(" ", "_", rownames(output))
-  return(output)
-}
-
-
 c.temp <- .avg.wrapper(meantemp, countries)
 c.temp <- .give.names(c.temp, countries$NAME_0, namelist, TRUE)
 
+s.temp <- .avg.wrapper(meantemp, states)
+s.temp <- .give.names(s.temp, states$GID_1, namelist, TRUE)
+
 saveRDS(c.temp, "output/annual-mean-temperature-forecast-countries.RDS")
+saveRDS(s.temp, "output/annual-mean-temperature-forecast-states.RDS")
 
 ## side note, RDS files are smaller than csvs, but maybe .csv would be better for usability?

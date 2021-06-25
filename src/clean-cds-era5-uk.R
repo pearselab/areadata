@@ -3,6 +3,7 @@
 #
 
 source("src/packages.R")
+source("src/functions.R")
 
 # command line arguments options
 
@@ -49,10 +50,7 @@ temp <- rgdal::readGDAL("data/cds-temp-dailymean.grib")
 humid <- rgdal::readGDAL("data/cds-humid-dailymean.grib")
 uv <- rgdal::readGDAL("data/cds-uv-dailymean.grib")
 precip <- rgdal::readGDAL("data/cds-precip-dailymean.grib")
-.drop.col <- function(i, sp.df){
-    sp.df@data <- sp.df@data[,i,drop=FALSE]
-    return(sp.df)
-}
+
 temp <- lapply(seq_along(dates), function(i, sp.df) raster::rotate(raster(.drop.col(i, sp.df))), sp.df=temp)
 humid <- lapply(seq_along(days), function(i, sp.df) raster::rotate(raster(.drop.col(i, sp.df))), sp.df=humid)
 uv <- lapply(seq_along(days), function(i, sp.df) raster::rotate(raster(.drop.col(i, sp.df))), sp.df=uv)
@@ -62,29 +60,6 @@ precip <- lapply(seq_along(days), function(i, sp.df) raster::rotate(raster(.drop
 UK_NUTS_reproj <- spTransform(UK_NUTS, crs(temp[[1]]))
 UK_LTLA_reproj <- spTransform(UK_LTLA, crs(temp[[1]]))
 
-######################################
-# Functions to run climate averaging #
-######################################
-
-.avg.climate <- function(shapefile, x){
-    # average the climate variable across each object in the shapefile
-    return(raster::extract(x = x, y = shapefile, fun=function(x, na.rm = TRUE)median(x, na.rm = TRUE), small = TRUE))
-}
-
-.avg.wrapper <- function(climate, region){
-    # use parallelised code to run this for a list of temperature data
-    return(do.call(cbind, mcMap(
-        function(x) .avg.climate(shapefile=region, x),
-        climate)))
-}
-
-.give.names <- function(output, rows, cols, rename=FALSE){
-    # add names to the climate averaging output
-    dimnames(output) <- list(rows, cols)
-    if(rename)
-        rownames(output) <- gsub(" ", "_", rownames(output))
-    return(output)
-}
 
 ################
 # run the code #

@@ -31,7 +31,7 @@ rm *.zip
 echo "Averaging climate projections across regions - this may take a while..."
 cd ../../
 
-Rscript src/forecast-averaging.R
+Rscript src/forecast-averaging.R -c 4
 
 # remove the tif files we now have lying around to save space - don't need them anymore
 echo "Removing downloaded files"

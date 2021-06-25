@@ -3,6 +3,7 @@
 #
 
 source("src/packages.R")
+source("src/functions.R")
 
 # command line arguments options
 
@@ -42,35 +43,6 @@ all_dates$date <- as.Date(paste(all_dates$years, all_dates$months, all_dates$day
 # pull the climate variables out into a character string
 climvars <- strsplit(opt$climvars, ",")[[1]]
 
-
-######################################
-# Functions to run climate averaging #
-######################################
-
-.drop.col <- function(i, sp.df){
-    sp.df@data <- sp.df@data[,i,drop=FALSE]
-    return(sp.df)
-}
-
-.avg.climate <- function(shapefile, x){
-    # average the climate variable across each object in the shapefile
-    return(raster::extract(x = x, y = shapefile, fun=function(x, na.rm = TRUE)median(x, na.rm = TRUE), small = TRUE))
-}
-
-.avg.wrapper <- function(climate, region){
-    # use parallelised code to run this for a list of temperature data
-    return(do.call(cbind, mcMap(
-        function(x) .avg.climate(shapefile=region, x),
-        climate)))
-}
-
-.give.names <- function(output, rows, cols, rename=FALSE){
-    # add names to the climate averaging output
-    dimnames(output) <- list(rows, cols)
-    if(rename)
-        rownames(output) <- gsub(" ", "_", rownames(output))
-    return(output)
-}
 
 ###################################################################
 # run the code, depending upon which climate variables are wanted #
@@ -201,7 +173,7 @@ if("precipitation" %in% climvars){
     precip <- rgdal::readGDAL("data/cds-precip-dailymean.grib")
     precip <- lapply(seq_along(dates), function(i, sp.df) raster::rotate(raster(.drop.col(i, sp.df))), sp.df=precip)
     
-    print("averaging precip across regions...")
+    print("averaging precipitation across regions...")
     c.precip <- .avg.wrapper(precip, countries)
     s.precip <- .avg.wrapper(precip, states)
     
@@ -209,7 +181,7 @@ if("precipitation" %in% climvars){
     c.precip <- .give.names(c.precip, countries$NAME_0, dates, TRUE)
     s.precip <- .give.names(s.precip, states$GID_1, dates)
     
-    print("merging with old precip data...")
+    print("merging with old precipitation data...")
     # read older climate data
     old.c.precip <- readRDS("output/precip-dailymean-countries-cleaned.RDS")
     old.s.precip <- readRDS("output/precip-dailymean-states-cleaned.RDS")
@@ -219,7 +191,7 @@ if("precipitation" %in% climvars){
     s.precip <- cbind(old.s.precip, s.precip[, !(colnames(s.precip) %in% colnames(old.s.precip))])
     
     # format and save
-    print("saving precip output files...")
+    print("saving precipitation output files...")
     saveRDS(c.precip, "output/precip-dailymean-countries-cleaned.RDS")
     saveRDS(s.precip, "output/precip-dailymean-states-cleaned.RDS")
     
