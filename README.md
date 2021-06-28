@@ -1,11 +1,47 @@
 # climate-averaging
-## Averaging climate variables across different spatial units, updating to present with new data
+## Averaging climate variables across different spatial units 
+
+### Daily estimates updated to present with new data
 
 RDS files with averaged climate variables across countries (GID.0) and states (GID.1) available in /output. 
 The most updated version's name is appended with -cleaned.RDS. 
 Currently this is available for temperature, humidity, precipitation and UV.
 
 Metadata linking country/state names to GID identifiers given in /data/name-matching.csv
+
+### Climate forecasts
+
+RDS files with mean annual temperature forecasts based on the CMIP6 future climate projections are given in /output `annual-mean-temperature-forecast-` for countries and states. 
+These contain estimates based on nine global climate models (BCC-CSM2-MR, CNRM-CM6-1, CNRM-ESM2-1, CanESM5, GFDL-ESM4, IPSL-CM6A-LR, MIROC-ES2L, MIROC6, MRI-ESM2-0), each for four Shared Socio-economic Pathways (SSPs: 126, 245, 370 and 585).
+Column headers give the model, ssp and future year-range estimated for.
+
+## Data sources
+
+When using these data, please also cite the original data sources used to generate the outputs provided here:
+
+### Spatial unit shapefiles
+
+Shapefiles for countries and states were acquired from the Global Administrative Areas (GADM) database of global administrative areas, version 3.6. https://www.gadm.org
+
+Shapefiles for UK NUTS and LTLA regions were acquired from the office for national statistics (ONS): https://geoportal.statistics.gov.uk
+
+### Daily climate variables
+
+Daily climate data were acquired from the Coperincus Climate Data Store (CDS); temperature and relative humidity from ERA5 hourly data on pressure levels, UV and precipitation from ERA5 hourly data on single levels:
+
+Hersbach, H., Bell, B., Berrisford, P., Biavati, G., Horányi, A., Muñoz Sabater, J., Nicolas, J., Peubey, C., Radu, R., Rozum, I., Schepers, D., Simmons, A., Soci, C., Dee, D., Thépaut, J-N. (2018): ERA5 hourly data on pressure levels from 1979 to present. Copernicus Climate Change Service (C3S) Climate Data Store (CDS). 10.24381/cds.bd0915c6
+
+Hersbach, H., Bell, B., Berrisford, P., Biavati, G., Horányi, A., Muñoz Sabater, J., Nicolas, J., Peubey, C., Radu, R., Rozum, I., Schepers, D., Simmons, A., Soci, C., Dee, D., Thépaut, J-N. (2018): ERA5 hourly data on single levels from 1979 to present. Copernicus Climate Change Service (C3S) Climate Data Store (CDS). 10.24381/cds.adbb2d47 
+
+### Population density
+
+Center for International Earth Science Information Network, Gridded population of the world, version 4 (GPWv4): Population density, revision 11. https://doi.org/ 10.7927/H49C6VHW
+
+### CMIP6 climate projections
+
+Downscaled CMIP6 future climate projections were acquired from WorldClim: https://worldclim.org/data/cmip6/cmip6_clim10m.html
+
+Fick, S.E. and R.J. Hijmans, 2017. WorldClim 2: new 1km spatial resolution climate surfaces for global land areas. International Journal of Climatology 37 (12): 4302-4315.
 
 # If you would like to set up this repositiory and run it yourself:
 
@@ -42,7 +78,3 @@ Metadata linking country/state names to GID identifiers given in /data/name-matc
    * By default this will download and clean data for Jan 2020. You could modify the starting date if you wish by changing the arguments in the calls to the python and R scripts, or add new climate variables in the python scripts, but this will be more involved.
    * This generates the first round of data files for the update script to then run off.
  
-
-## Future plan:
-
-Include future climate forecasts

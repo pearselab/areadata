@@ -2,6 +2,7 @@ silent.require <- function(x) suppressMessages(require(package=x, character.only
 
 # Load packages that are already installed
 packages <- c("optparse", "raster", "sf", "tidyr", "rgdal", "parallel"
+              "ggplot2", "viridis"
 )
 
 ready <- sapply(packages, silent.require)
