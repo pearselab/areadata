@@ -6,3 +6,6 @@
 
 # nohup from Roy runs
 nohup.out
+
+# non-standard output files
+/output/*.pdf
