@@ -4,7 +4,7 @@
 
 echo "Run cds download script over a particular date range"
 
-python3 src/cds-era5-args.py -y 2021 -m 05 -c temperature humidity uv precipitation
+python3 src/cds-era5-args.py -y 2020 -m 01 -c temperature humidity uv precipitation
 
 echo "Average across single days"
 
@@ -15,6 +15,6 @@ cdo daymean data/cds-precip.grib data/cds-precip-dailymean.grib
 
 echo "Average daily climate data across spatial regions"
 
-Rscript src/clean-cds-era5-uk.R -y 2021 -m 05
+Rscript src/clean-cds-era5-uk.R -y 2020 -m 01
 
 echo "... Finished averaging across regions! Files written to output directory!"
