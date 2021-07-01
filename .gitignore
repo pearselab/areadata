@@ -9,3 +9,4 @@ nohup.out
 
 # non-standard output files
 /output/*.pdf
+/output/*.svg
