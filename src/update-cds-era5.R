@@ -105,7 +105,7 @@ if("temperature" %in% climvars){
     saveRDS(UK_LTLA.temp, "output/temp-dailymean-UK-LTLA-cleaned.RDS")
     
     # save a backup of the older data
-    enddate <- max(colnames(old.c.temp))
+    enddate <- max(colnames(old.UK_NUTS.temp))
     # saveRDS(old.c.temp, paste("output/temp-dailymean-countries-", enddate, ".RDS", sep = ""))
     # saveRDS(old.s.temp, paste("output/temp-dailymean-states-", enddate, ".RDS", sep = ""))
     saveRDS(old.UK_NUTS.temp, paste("output/temp-dailymean-UK-NUTS-", enddate, ".RDS", sep = ""))
@@ -156,7 +156,7 @@ if("humidity" %in% climvars){
     saveRDS(UK_LTLA.humid, "output/humid-dailymean-UK-LTLA-cleaned.RDS")
     
     # save a backup of the older data
-    enddate <- max(colnames(old.c.humid))
+    enddate <- max(colnames(old.UK_NUTS.humid))
     # saveRDS(old.c.humid, paste("output/humid-dailymean-countries-", enddate, ".RDS", sep = ""))
     # saveRDS(old.s.humid, paste("output/humid-dailymean-states-", enddate, ".RDS", sep = ""))
     saveRDS(old.UK_NUTS.humid, paste("output/humid-dailymean-UK-NUTS-", enddate, ".RDS", sep = ""))
@@ -208,7 +208,7 @@ if("uv" %in% climvars){
     saveRDS(UK_LTLA.uv, "output/uv-dailymean-UK-LTLA-cleaned.RDS")
     
     # save a backup of the older data
-    enddate <- max(colnames(old.c.uv))
+    enddate <- max(colnames(old.UK_NUTS.uv))
     # saveRDS(old.c.uv, paste("output/uv-dailymean-countries-", enddate, ".RDS", sep = ""))
     # saveRDS(old.s.uv, paste("output/uv-dailymean-states-", enddate, ".RDS", sep = ""))
     saveRDS(old.UK_NUTS.uv, paste("output/uv-dailymean-UK-NUTS-", enddate, ".RDS", sep = ""))
@@ -260,7 +260,7 @@ if("precipitation" %in% climvars){
     saveRDS(UK_LTLA.precip, "output/precip-dailymean-UK-LTLA-cleaned.RDS")
     
     # save a backup of the older data
-    enddate <- max(colnames(old.c.precip))
+    enddate <- max(colnames(old.UK_NUTS.precip))
     # saveRDS(old.c.precip, paste("output/precip-dailymean-countries-", enddate, ".RDS", sep = ""))
     # saveRDS(old.s.precip, paste("output/precip-dailymean-states-", enddate, ".RDS", sep = ""))
     saveRDS(old.UK_NUTS.precip, paste("output/precip-dailymean-UK-NUTS-", enddate, ".RDS", sep = ""))
