@@ -287,7 +287,7 @@ if("precipitation" %in% climvars){
     enddate <- max(colnames(old.ct.precip))
     # saveRDS(old.c.precip, paste("output/precip-dailymean-countries-", enddate, ".RDS", sep = ""))
     # saveRDS(old.s.precip, paste("output/precip-dailymean-GID1-", enddate, ".RDS", sep = ""))
-    saveRDS(old.ct.precip, paste("output/precip-dailymean-GID2-", enddate, ".RDS", sep = ""))
+    saveRDS(old.ct.precip, paste("output/archive/precip-dailymean-GID2-", enddate, ".RDS", sep = ""))
     # saveRDS(old.UK_NUTS.precip, paste("output/precip-dailymean-UK-NUTS-", enddate, ".RDS", sep = ""))
     # saveRDS(old.UK_LTLA.precip, paste("output/precip-dailymean-UK-LTLA-", enddate, ".RDS", sep = ""))
 }

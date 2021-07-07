@@ -12,4 +12,4 @@ nohup.out
 /output/*.svg
 
 # don't save the archive files to the github
-# output/archive/*
+output/archive/*
