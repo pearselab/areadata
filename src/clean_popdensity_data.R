@@ -21,7 +21,7 @@ UK_LTLA_reproj <- spTransform(UK_LTLA, crs(pop_data))
 
 # extract across regions
 c.popdensity <- raster::extract(x = pop_data, y = countries, fun=function(x, na.rm = TRUE)median(x, na.rm = TRUE), small = TRUE)
-s.popdensity <- raster::extract(x = pop_data, y = countries, fun=function(x, na.rm = TRUE)median(x, na.rm = TRUE), small = TRUE)
+s.popdensity <- raster::extract(x = pop_data, y = states, fun=function(x, na.rm = TRUE)median(x, na.rm = TRUE), small = TRUE)
 ct.popdensity <- raster::extract(x = pop_data, y = counties, fun=function(x, na.rm = TRUE)median(x, na.rm = TRUE), small = TRUE)
 UK_NUTS.popdensity <- raster::extract(x = pop_data, y = UK_NUTS_reproj, fun=function(x, na.rm = TRUE)median(x, na.rm = TRUE), small = TRUE)
 UK_LTLA.popdensity <- raster::extract(x = pop_data, y = UK_LTLA_reproj, fun=function(x, na.rm = TRUE)median(x, na.rm = TRUE), small = TRUE)
