@@ -3,11 +3,11 @@
 
 ### Daily estimates updated to present with new data
 
-RDS files with averaged climate variables across countries (GID.0) and states (GID.1) available in /output. 
+RDS files with averaged climate variables across countries (GID.0), states (GID.1) and counties (GID.2) available in /output. 
 The most updated version's name is appended with -cleaned.RDS. 
 Currently this is available for temperature, humidity, precipitation and UV.
 
-Metadata linking country/state names to GID identifiers given in /data/name-matching.csv
+Metadata linking country/state/county names to GID identifiers given in /data/name-matching.csv
 
 ### Climate forecasts
 
@@ -21,7 +21,7 @@ When using these data, please also cite the original data sources used to genera
 
 ### Spatial unit shapefiles
 
-Shapefiles for countries and states were acquired from the Global Administrative Areas (GADM) database of global administrative areas, version 3.6. https://www.gadm.org
+Shapefiles for countries, states and counties were acquired from the Global Administrative Areas (GADM) database of global administrative areas, version 3.6. https://www.gadm.org
 
 Shapefiles for UK NUTS and LTLA regions were acquired from the office for national statistics (ONS): https://geoportal.statistics.gov.uk
 
