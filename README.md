@@ -1,5 +1,5 @@
-# climate-averaging
-## Averaging climate variables across different spatial units 
+# AREAdata
+## Administrative Region Environmental Averages "AREA" dataset
 
 ### Daily estimates updated to present with new data
 

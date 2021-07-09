@@ -3,10 +3,14 @@
 
 # data files
 /data/*.grib
+/data/raw-forecasts/*
 
 # nohup from Roy runs
-nohup.out
+*.out
 
 # non-standard output files
 /output/*.pdf
 /output/*.svg
+
+# don't save the archive files to the github
+output/archive/*
