@@ -11,6 +11,7 @@
 # non-standard output files
 /output/*.pdf
 /output/*.svg
+/output/*.png
 
 # don't save the archive files to the github
 output/archive/*
