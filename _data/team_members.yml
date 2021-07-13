@@ -1,0 +1,15 @@
+- name: Will Pearse
+  photo: will-pearse.jpg
+  info: Team lead.
+  number_educ: 3
+  education1: Senior lecturer at Imperial College London
+  education2: <a href="http://pearselab.com/">Website</a>
+  education3: <a href="mailto:will.pearse@imperial.ac.uk">Email</a>
+
+- name: Tom Smith
+  photo: tom-smith.jpg
+  info: Software Development.
+  number_educ: 3
+  education1: Postdoc at Imperial College London
+  education2: <a href="https://smithtp.github.io">Website</a>
+  education3: <a href="mailto:thomas.smith1@imperial.ac.uk">Email</a>
