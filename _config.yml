@@ -11,7 +11,7 @@ email: will.pearse@imperial.ac.uk
 description: > # this means to ignore newlines until "baseurl:"
   A repository for spatially averaged climate data, updated to the near-present.
 baseurl: ""
-url: "https://areadata.github.io/"
+url: "https://pearselab.github.io/areadata/"
 
 include:
   - .htaccess
