@@ -15,3 +15,7 @@
 
 # don't save the archive files to the github
 output/archive/*
+
+# stuff from the github pages build
+_site/
+.jekyll-cache/
