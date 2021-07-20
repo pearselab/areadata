@@ -11,6 +11,12 @@ permalink: /download-links/
 Here we provide links to download the spatially averaged data as .RDS files for use in R. 
 See methods page for the original data sources, our processing methods, and the units given.
 
+## Metadata
+
+Download the metadata linking GID admin codes with place names: [HERE](https://github.com/pearselab/areadata/raw/main/data/name-matching.csv)
+
+----
+
 ## Daily Climate Estimates
 
 Matrices of daily climate estimates by spatial units (rows) and by date (columns).
