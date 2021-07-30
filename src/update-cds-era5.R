@@ -127,68 +127,132 @@ if("temperature" %in% climvars){
     saveRDS(old.UK_STP.temp, paste("output/archive/temp-dailymean-UK-STP-", enddate, ".RDS", sep = ""))
 }
 
-# humidity
-if("humidity" %in% climvars){
-    print("loading humidity data...")
+# specific humidity
+if("spec_humid" %in% climvars){
+    print("loading specific humidity data...")
     # Load climate data and subset into rasters for each day of the year
-    humid <- rgdal::readGDAL("data/cds-humid-dailymean.grib")
-    humid <- lapply(seq_along(dates), function(i, sp.df) raster::rotate(raster(.drop.col(i, sp.df))), sp.df=humid)
+    spechumid <- rgdal::readGDAL("data/cds-spechumid-dailymean.grib")
+    spechumid <- lapply(seq_along(dates), function(i, sp.df) raster::rotate(raster(.drop.col(i, sp.df))), sp.df=spechumid)
     
     # get the UK spatial data into the correct projection
-    UK_NUTS_reproj <- spTransform(UK_NUTS, crs(humid[[1]]))
-    UK_LTLA_reproj <- spTransform(UK_LTLA, crs(humid[[1]]))
-    UK_STP_reproj <- spTransform(UK_STP, crs(humid[[1]]))
+    UK_NUTS_reproj <- spTransform(UK_NUTS, crs(spechumid[[1]]))
+    UK_LTLA_reproj <- spTransform(UK_LTLA, crs(spechumid[[1]]))
+    UK_STP_reproj <- spTransform(UK_STP, crs(spechumid[[1]]))
     
     print("averaging humidity across regions...")
-    c.humid <- .avg.wrapper(humid, countries)
-    s.humid <- .avg.wrapper(humid, states)
-    ct.humid <- .avg.wrapper(humid, counties)
-    UK_NUTS.humid <- .avg.wrapper(humid, UK_NUTS_reproj)
-    UK_LTLA.humid <- .avg.wrapper(humid, UK_LTLA_reproj)
-    UK_STP.humid <- .avg.wrapper(humid, UK_STP_reproj)
+    c.spechumid <- .avg.wrapper(spechumid, countries)
+    s.spechumid <- .avg.wrapper(spechumid, states)
+    ct.spechumid <- .avg.wrapper(spechumid, counties)
+    UK_NUTS.spechumid <- .avg.wrapper(spechumid, UK_NUTS_reproj)
+    UK_LTLA.spechumid <- .avg.wrapper(spechumid, UK_LTLA_reproj)
+    UK_STP.spechumid <- .avg.wrapper(spechumid, UK_STP_reproj)
     
     # format
-    c.humid <- .give.names(c.humid, countries$NAME_0, dates, TRUE)
-    s.humid <- .give.names(s.humid, states$GID_1, dates)
-    ct.humid <- .give.names(ct.humid, counties$GID_2, dates)
-    UK_NUTS.humid <- .give.names(UK_NUTS.humid, UK_NUTS$nuts118nm, dates, TRUE)
-    UK_LTLA.humid <- .give.names(UK_LTLA.humid, UK_LTLA$lad19nm, dates, TRUE)
-    UK_STP.humid <- .give.names(UK_STP.humid, UK_STP$STP21NM, dates, TRUE)
+    c.spechumid <- .give.names(c.spechumid, countries$NAME_0, dates, TRUE)
+    s.spechumid <- .give.names(s.spechumid, states$GID_1, dates)
+    ct.spechumid <- .give.names(ct.spechumid, counties$GID_2, dates)
+    UK_NUTS.spechumid <- .give.names(UK_NUTS.spechumid, UK_NUTS$nuts118nm, dates, TRUE)
+    UK_LTLA.spechumid <- .give.names(UK_LTLA.spechumid, UK_LTLA$lad19nm, dates, TRUE)
+    UK_STP.spechumid <- .give.names(UK_STP.spechumid, UK_STP$STP21NM, dates, TRUE)
     
     print("merging with old humidity data...")
     # read older climate data
-    old.c.humid <- readRDS("output/humid-dailymean-countries-cleaned.RDS")
-    old.s.humid <- readRDS("output/humid-dailymean-GID1-cleaned.RDS")
-    old.ct.humid <- readRDS("output/humid-dailymean-GID2-cleaned.RDS")
-    old.UK_NUTS.humid <- readRDS("output/humid-dailymean-UK-NUTS-cleaned.RDS")
-    old.UK_LTLA.humid <- readRDS("output/humid-dailymean-UK-LTLA-cleaned.RDS")
-    old.UK_STP.humid <- readRDS("output/humid-dailymean-UK-STP-cleaned.RDS")
+    old.c.spechumid <- readRDS("output/spechumid-dailymean-countries-cleaned.RDS")
+    old.s.spechumid <- readRDS("output/spechumid-dailymean-GID1-cleaned.RDS")
+    old.ct.spechumid <- readRDS("output/spechumid-dailymean-GID2-cleaned.RDS")
+    old.UK_NUTS.spechumid <- readRDS("output/spechumid-dailymean-UK-NUTS-cleaned.RDS")
+    old.UK_LTLA.spechumid <- readRDS("output/spechumid-dailymean-UK-LTLA-cleaned.RDS")
+    old.UK_STP.spechumid <- readRDS("output/spechumid-dailymean-UK-STP-cleaned.RDS")
     
     # merge two climate matrices together
-    c.humid <- cbind(old.c.humid, c.humid[, !(colnames(c.humid) %in% colnames(old.c.humid))])
-    s.humid <- cbind(old.s.humid, s.humid[, !(colnames(s.humid) %in% colnames(old.s.humid))])
-    ct.humid <- cbind(old.ct.humid, ct.humid[, !(colnames(ct.humid) %in% colnames(old.ct.humid))])
-    UK_NUTS.humid <- cbind(old.UK_NUTS.humid, UK_NUTS.humid[, !(colnames(UK_NUTS.humid) %in% colnames(old.UK_NUTS.humid))])
-    UK_LTLA.humid <- cbind(old.UK_LTLA.humid, UK_LTLA.humid[, !(colnames(UK_LTLA.humid) %in% colnames(old.UK_LTLA.humid))])
-    UK_STP.humid <- cbind(old.UK_STP.humid, UK_STP.humid[, !(colnames(UK_STP.humid) %in% colnames(old.UK_STP.humid))])
+    c.spechumid <- cbind(old.c.spechumid, c.spechumid[, !(colnames(c.spechumid) %in% colnames(old.c.spechumid))])
+    s.spechumid <- cbind(old.s.spechumid, s.spechumid[, !(colnames(s.spechumid) %in% colnames(old.s.spechumid))])
+    ct.spechumid <- cbind(old.ct.spechumid, ct.spechumid[, !(colnames(ct.spechumid) %in% colnames(old.ct.spechumid))])
+    UK_NUTS.spechumid <- cbind(old.UK_NUTS.spechumid, UK_NUTS.spechumid[, !(colnames(UK_NUTS.spechumid) %in% colnames(old.UK_NUTS.spechumid))])
+    UK_LTLA.spechumid <- cbind(old.UK_LTLA.spechumid, UK_LTLA.spechumid[, !(colnames(UK_LTLA.spechumid) %in% colnames(old.UK_LTLA.spechumid))])
+    UK_STP.spechumid <- cbind(old.UK_STP.spechumid, UK_STP.spechumid[, !(colnames(UK_STP.spechumid) %in% colnames(old.UK_STP.spechumid))])
     
     # format and save
     print("saving humidity output files...")
-    saveRDS(c.humid, "output/humid-dailymean-countries-cleaned.RDS")
-    saveRDS(s.humid, "output/humid-dailymean-GID1-cleaned.RDS")
-    saveRDS(ct.humid, "output/humid-dailymean-GID2-cleaned.RDS")
-    saveRDS(UK_NUTS.humid, "output/humid-dailymean-UK-NUTS-cleaned.RDS")
-    saveRDS(UK_LTLA.humid, "output/humid-dailymean-UK-LTLA-cleaned.RDS")
-    saveRDS(UK_STP.humid, "output/humid-dailymean-UK-STP-cleaned.RDS")
+    saveRDS(c.spechumid, "output/spechumid-dailymean-countries-cleaned.RDS")
+    saveRDS(s.spechumid, "output/spechumid-dailymean-GID1-cleaned.RDS")
+    saveRDS(ct.spechumid, "output/spechumid-dailymean-GID2-cleaned.RDS")
+    saveRDS(UK_NUTS.spechumid, "output/spechumid-dailymean-UK-NUTS-cleaned.RDS")
+    saveRDS(UK_LTLA.spechumid, "output/spechumid-dailymean-UK-LTLA-cleaned.RDS")
+    saveRDS(UK_STP.spechumid, "output/spechumid-dailymean-UK-STP-cleaned.RDS")
     
     # save a backup of the older data
-    enddate <- max(colnames(old.c.humid))
-    saveRDS(old.c.humid, paste("output/archive/humid-dailymean-countries-", enddate, ".RDS", sep = ""))
-    saveRDS(old.s.humid, paste("output/archive/humid-dailymean-GID1-", enddate, ".RDS", sep = ""))
-    saveRDS(old.ct.humid, paste("output/archive/humid-dailymean-GID2-", enddate, ".RDS", sep = ""))
-    saveRDS(old.UK_NUTS.humid, paste("output/archive/humid-dailymean-UK-NUTS-", enddate, ".RDS", sep = ""))
-    saveRDS(old.UK_LTLA.humid, paste("output/archive/humid-dailymean-UK-LTLA-", enddate, ".RDS", sep = ""))
-    saveRDS(old.UK_STP.humid, paste("output/archive/humid-dailymean-UK-STP-", enddate, ".RDS", sep = ""))
+    enddate <- max(colnames(old.c.spechumid))
+    saveRDS(old.c.spechumid, paste("output/archive/spechumid-dailymean-countries-", enddate, ".RDS", sep = ""))
+    saveRDS(old.s.spechumid, paste("output/archive/spechumid-dailymean-GID1-", enddate, ".RDS", sep = ""))
+    saveRDS(old.ct.spechumid, paste("output/archive/spechumid-dailymean-GID2-", enddate, ".RDS", sep = ""))
+    saveRDS(old.UK_NUTS.spechumid, paste("output/archive/spechumid-dailymean-UK-NUTS-", enddate, ".RDS", sep = ""))
+    saveRDS(old.UK_LTLA.spechumid, paste("output/archive/spechumid-dailymean-UK-LTLA-", enddate, ".RDS", sep = ""))
+    saveRDS(old.UK_STP.spechumid, paste("output/archive/spechumid-dailymean-UK-STP-", enddate, ".RDS", sep = ""))
+}
+
+# relative humidity
+if("rel_humid" %in% climvars){
+    print("loading humidity data...")
+    # Load climate data and subset into rasters for each day of the year
+    relhumid <- rgdal::readGDAL("data/cds-relhumid-dailymean.grib")
+    relhumid <- lapply(seq_along(dates), function(i, sp.df) raster::rotate(raster(.drop.col(i, sp.df))), sp.df=relhumid)
+    
+    # get the UK spatial data into the correct projection
+    UK_NUTS_reproj <- spTransform(UK_NUTS, crs(relhumid[[1]]))
+    UK_LTLA_reproj <- spTransform(UK_LTLA, crs(relhumid[[1]]))
+    UK_STP_reproj <- spTransform(UK_STP, crs(relhumid[[1]]))
+    
+    print("averaging humidity across regions...")
+    c.relhumid <- .avg.wrapper(relhumid, countries)
+    s.relhumid <- .avg.wrapper(relhumid, states)
+    ct.relhumid <- .avg.wrapper(relhumid, counties)
+    UK_NUTS.relhumid <- .avg.wrapper(relhumid, UK_NUTS_reproj)
+    UK_LTLA.relhumid <- .avg.wrapper(relhumid, UK_LTLA_reproj)
+    UK_STP.relhumid <- .avg.wrapper(relhumid, UK_STP_reproj)
+    
+    # format
+    c.relhumid <- .give.names(c.relhumid, countries$NAME_0, dates, TRUE)
+    s.relhumid <- .give.names(s.relhumid, states$GID_1, dates)
+    ct.relhumid <- .give.names(ct.relhumid, counties$GID_2, dates)
+    UK_NUTS.relhumid <- .give.names(UK_NUTS.relhumid, UK_NUTS$nuts118nm, dates, TRUE)
+    UK_LTLA.relhumid <- .give.names(UK_LTLA.relhumid, UK_LTLA$lad19nm, dates, TRUE)
+    UK_STP.relhumid <- .give.names(UK_STP.relhumid, UK_STP$STP21NM, dates, TRUE)
+    
+    print("merging with old humidity data...")
+    # read older climate data
+    old.c.relhumid <- readRDS("output/relhumid-dailymean-countries-cleaned.RDS")
+    old.s.relhumid <- readRDS("output/relhumid-dailymean-GID1-cleaned.RDS")
+    old.ct.relhumid <- readRDS("output/relhumid-dailymean-GID2-cleaned.RDS")
+    old.UK_NUTS.relhumid <- readRDS("output/relhumid-dailymean-UK-NUTS-cleaned.RDS")
+    old.UK_LTLA.relhumid <- readRDS("output/relhumid-dailymean-UK-LTLA-cleaned.RDS")
+    old.UK_STP.relhumid <- readRDS("output/relhumid-dailymean-UK-STP-cleaned.RDS")
+    
+    # merge two climate matrices together
+    c.relhumid <- cbind(old.c.relhumid, c.relhumid[, !(colnames(c.relhumid) %in% colnames(old.c.relhumid))])
+    s.relhumid <- cbind(old.s.relhumid, s.relhumid[, !(colnames(s.relhumid) %in% colnames(old.s.relhumid))])
+    ct.relhumid <- cbind(old.ct.relhumid, ct.relhumid[, !(colnames(ct.relhumid) %in% colnames(old.ct.relhumid))])
+    UK_NUTS.relhumid <- cbind(old.UK_NUTS.relhumid, UK_NUTS.relhumid[, !(colnames(UK_NUTS.relhumid) %in% colnames(old.UK_NUTS.relhumid))])
+    UK_LTLA.relhumid <- cbind(old.UK_LTLA.relhumid, UK_LTLA.relhumid[, !(colnames(UK_LTLA.relhumid) %in% colnames(old.UK_LTLA.relhumid))])
+    UK_STP.relhumid <- cbind(old.UK_STP.relhumid, UK_STP.relhumid[, !(colnames(UK_STP.relhumid) %in% colnames(old.UK_STP.relhumid))])
+    
+    # format and save
+    print("saving humidity output files...")
+    saveRDS(c.relhumid, "output/relhumid-dailymean-countries-cleaned.RDS")
+    saveRDS(s.relhumid, "output/relhumid-dailymean-GID1-cleaned.RDS")
+    saveRDS(ct.relhumid, "output/relhumid-dailymean-GID2-cleaned.RDS")
+    saveRDS(UK_NUTS.relhumid, "output/relhumid-dailymean-UK-NUTS-cleaned.RDS")
+    saveRDS(UK_LTLA.relhumid, "output/relhumid-dailymean-UK-LTLA-cleaned.RDS")
+    saveRDS(UK_STP.relhumid, "output/relhumid-dailymean-UK-STP-cleaned.RDS")
+    
+    # save a backup of the older data
+    enddate <- max(colnames(old.c.relhumid))
+    saveRDS(old.c.relhumid, paste("output/archive/relhumid-dailymean-countries-", enddate, ".RDS", sep = ""))
+    saveRDS(old.s.relhumid, paste("output/archive/relhumid-dailymean-GID1-", enddate, ".RDS", sep = ""))
+    saveRDS(old.ct.relhumid, paste("output/archive/relhumid-dailymean-GID2-", enddate, ".RDS", sep = ""))
+    saveRDS(old.UK_NUTS.relhumid, paste("output/archive/relhumid-dailymean-UK-NUTS-", enddate, ".RDS", sep = ""))
+    saveRDS(old.UK_LTLA.relhumid, paste("output/archive/relhumid-dailymean-UK-LTLA-", enddate, ".RDS", sep = ""))
+    saveRDS(old.UK_STP.relhumid, paste("output/archive/relhumid-dailymean-UK-STP-", enddate, ".RDS", sep = ""))
 }
 
 

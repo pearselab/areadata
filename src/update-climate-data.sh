@@ -35,8 +35,12 @@ if [[ "$climvar" == *"temperature"* ]]; then
   cdo daymean data/cds-temp.grib data/cds-temp-dailymean.grib
 fi
 
-if [[ "$climvar" == *"humidity"* ]]; then
-  cdo daymean data/cds-humid.grib data/cds-humid-dailymean.grib
+if [[ "$climvar" == *"spec_humid"* ]]; then
+  cdo daymean data/cds-spechumid.grib data/cds-spechumid-dailymean.grib
+fi
+
+if [[ "$climvar" == *"rel_humid"* ]]; then
+  cdo daymean data/cds-relhumid.grib data/cds-relhumid-dailymean.grib
 fi
 
 if [[ "$climvar" == *"uv"* ]]; then
