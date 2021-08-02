@@ -51,12 +51,14 @@ print("loading climate data...")
 # Load climate data and subset into rasters for each day of the year
 dates <- as.character(all_dates[!is.na(all_dates$date),]$date)
 temp <- rgdal::readGDAL("data/cds-temp-dailymean.grib")
-humid <- rgdal::readGDAL("data/cds-humid-dailymean.grib")
+spechumid <- rgdal::readGDAL("data/cds-spechumid-dailymean.grib")
+relhumid <- rgdal::readGDAL("data/cds-relhumid-dailymean.grib")
 uv <- rgdal::readGDAL("data/cds-uv-dailymean.grib")
 precip <- rgdal::readGDAL("data/cds-precip-dailymean.grib")
 
 temp <- lapply(seq_along(dates), function(i, sp.df) raster::rotate(raster(.drop.col(i, sp.df))), sp.df=temp)
-humid <- lapply(seq_along(days), function(i, sp.df) raster::rotate(raster(.drop.col(i, sp.df))), sp.df=humid)
+spechumid <- lapply(seq_along(days), function(i, sp.df) raster::rotate(raster(.drop.col(i, sp.df))), sp.df=spechumid)
+relhumid <- lapply(seq_along(days), function(i, sp.df) raster::rotate(raster(.drop.col(i, sp.df))), sp.df=relhumid)
 uv <- lapply(seq_along(days), function(i, sp.df) raster::rotate(raster(.drop.col(i, sp.df))), sp.df=uv)
 precip <- lapply(seq_along(days), function(i, sp.df) raster::rotate(raster(.drop.col(i, sp.df))), sp.df=precip)
 
@@ -77,12 +79,19 @@ UK_NUTS.temp <- .avg.wrapper(temp, UK_NUTS_reproj)
 UK_LTLA.temp <- .avg.wrapper(temp, UK_LTLA_reproj)
 UK_STP.temp <- .avg.wrapper(temp, UK_STP_reproj)
 
-c.humid <- .avg.wrapper(humid, countries)
-s.humid <- .avg.wrapper(humid, states)
-ct.humid <- .avg.wrapper(humid, counties)
-UK_NUTS.humid <- .avg.wrapper(humid, UK_NUTS_reproj)
-UK_LTLA.humid <- .avg.wrapper(humid, UK_LTLA_reproj)
-UK_STP.humid <- .avg.wrapper(humid, UK_STP_reproj)
+c.spechumid <- .avg.wrapper(spechumid, countries)
+s.spechumid <- .avg.wrapper(spechumid, states)
+ct.spechumid <- .avg.wrapper(spechumid, counties)
+UK_NUTS.spechumid <- .avg.wrapper(spechumid, UK_NUTS_reproj)
+UK_LTLA.spechumid <- .avg.wrapper(spechumid, UK_LTLA_reproj)
+UK_STP.spechumid <- .avg.wrapper(spechumid, UK_STP_reproj)
+
+c.relhumid <- .avg.wrapper(relhumid, countries)
+s.relhumid <- .avg.wrapper(relhumid, states)
+ct.relhumid <- .avg.wrapper(relhumid, counties)
+UK_NUTS.relhumid <- .avg.wrapper(relhumid, UK_NUTS_reproj)
+UK_LTLA.relhumid <- .avg.wrapper(relhumid, UK_LTLA_reproj)
+UK_STP.relhumid <- .avg.wrapper(relhumid, UK_STP_reproj)
 
 c.uv <- .avg.wrapper(uv, countries)
 s.uv <- .avg.wrapper(uv, states)
@@ -100,6 +109,7 @@ UK_STP.precip <- .avg.wrapper(precip, UK_STP_reproj)
 
 # format and save
 print("saving output files...")
+# Temperature
 saveRDS(
     .give.names(c.temp, countries$NAME_0, dates, TRUE),
     "output/temp-dailymean-countries-cleaned.RDS"
@@ -125,31 +135,59 @@ saveRDS(
     "output/temp-dailymean-UK-STP-cleaned.RDS"
 )
 
+# Specific Humidity
 saveRDS(
-    .give.names(c.humid, countries$NAME_0, dates, TRUE),
-    "output/humid-dailymean-countries-cleaned.RDS"
+    .give.names(c.spechumid, countries$NAME_0, dates, TRUE),
+    "output/spechumid-dailymean-countries-cleaned.RDS"
 )
 saveRDS(
-    .give.names(s.humid, states$GID_1, dates),
-    "output/humid-dailymean-GID1-cleaned.RDS"
+    .give.names(s.spechumid, states$GID_1, dates),
+    "output/spechumid-dailymean-GID1-cleaned.RDS"
 )
 saveRDS(
-    .give.names(ct.humid, counties$GID_2, dates),
-    "output/humid-dailymean-GID2-cleaned.RDS"
+    .give.names(ct.spechumid, counties$GID_2, dates),
+    "output/spechumid-dailymean-GID2-cleaned.RDS"
 )
 saveRDS(
-    .give.names(UK_NUTS.humid, UK_NUTS$nuts118nm, dates, TRUE),
-    "output/humid-dailymean-UK-NUTS-cleaned.RDS"
+    .give.names(UK_NUTS.spechumid, UK_NUTS$nuts118nm, dates, TRUE),
+    "output/spechumid-dailymean-UK-NUTS-cleaned.RDS"
 )
 saveRDS(
-    .give.names(UK_LTLA.humid, UK_LTLA$lad19nm, dates, TRUE),
-    "output/humid-dailymean-UK-LTLA-cleaned.RDS"
+    .give.names(UK_LTLA.spechumid, UK_LTLA$lad19nm, dates, TRUE),
+    "output/spechumid-dailymean-UK-LTLA-cleaned.RDS"
 )
 saveRDS(
-    .give.names(UK_STP.humid, UK_STP$STP21NM, dates, TRUE),
-    "output/humid-dailymean-UK-STP-cleaned.RDS"
+    .give.names(UK_STP.spechumid, UK_STP$STP21NM, dates, TRUE),
+    "output/spechumid-dailymean-UK-STP-cleaned.RDS"
 )
 
+# Relative humidity
+saveRDS(
+    .give.names(c.relhumid, countries$NAME_0, dates, TRUE),
+    "output/relhumid-dailymean-countries-cleaned.RDS"
+)
+saveRDS(
+    .give.names(s.relhumid, states$GID_1, dates),
+    "output/relhumid-dailymean-GID1-cleaned.RDS"
+)
+saveRDS(
+    .give.names(ct.relhumid, counties$GID_2, dates),
+    "output/relhumid-dailymean-GID2-cleaned.RDS"
+)
+saveRDS(
+    .give.names(UK_NUTS.relhumid, UK_NUTS$nuts118nm, dates, TRUE),
+    "output/relhumid-dailymean-UK-NUTS-cleaned.RDS"
+)
+saveRDS(
+    .give.names(UK_LTLA.relhumid, UK_LTLA$lad19nm, dates, TRUE),
+    "output/relhumid-dailymean-UK-LTLA-cleaned.RDS"
+)
+saveRDS(
+    .give.names(UK_STP.relhumid, UK_STP$STP21NM, dates, TRUE),
+    "output/relhumid-dailymean-UK-STP-cleaned.RDS"
+)
+
+# UV
 saveRDS(
     .give.names(c.uv, countries$NAME_0, dates, TRUE),
     "output/uv-dailymean-countries-cleaned.RDS"
@@ -175,6 +213,7 @@ saveRDS(
     "output/uv-dailymean-UK-STP-cleaned.RDS"
 )
 
+# Precipitation
 saveRDS(
     .give.names(c.precip, countries$NAME_0, dates, TRUE),
     "output/precip-dailymean-countries-cleaned.RDS"
