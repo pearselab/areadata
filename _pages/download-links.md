@@ -29,13 +29,21 @@ Matrices of daily climate estimates by spatial units (rows) and by date (columns
 * [UK NUTS 1 regions (Nomenclature of Territorial Units for Statistics; comprising Wales, Scotland, Northern Ireland, and 9 regions of England)](https://github.com/pearselab/areadata/raw/main/output/temp-dailymean-UK-NUTS-cleaned.RDS)
 * [UK LTLAs (Lower-tier local authorities; districts, boroughs or city councils)](https://github.com/pearselab/areadata/raw/main/output/temp-dailymean-UK-LTLA-cleaned.RDS)
 
+### Specific (Absolute) Humidity
+
+* [GID level 0 (Countries)](https://github.com/pearselab/areadata/raw/main/output/spechumid-dailymean-countries-cleaned.RDS)
+* [GID level 1 (States)](https://github.com/pearselab/areadata/raw/main/output/spechumid-dailymean-GID1-cleaned.RDS)
+* [GID level 2 (Counties)](https://github.com/pearselab/areadata/raw/main/output/spechumid-dailymean-GID2-cleaned.RDS)
+* [UK NUTS 1 regions (Nomenclature of Territorial Units for Statistics; comprising Wales, Scotland, Northern Ireland, and 9 regions of England)](https://github.com/pearselab/areadata/raw/main/output/spechumid-dailymean-UK-NUTS-cleaned.RDS)
+* [UK LTLAs (Lower-tier local authorities; districts, boroughs or city councils)](https://github.com/pearselab/areadata/raw/main/output/spechumid-dailymean-UK-LTLA-cleaned.RDS)
+
 ### Relative Humidity
 
-* [GID level 0 (Countries)](https://github.com/pearselab/areadata/raw/main/output/humid-dailymean-countries-cleaned.RDS)
-* [GID level 1 (States)](https://github.com/pearselab/areadata/raw/main/output/humid-dailymean-GID1-cleaned.RDS)
-* [GID level 2 (Counties)](https://github.com/pearselab/areadata/raw/main/output/humid-dailymean-GID2-cleaned.RDS)
-* [UK NUTS 1 regions (Nomenclature of Territorial Units for Statistics; comprising Wales, Scotland, Northern Ireland, and 9 regions of England)](https://github.com/pearselab/areadata/raw/main/output/humid-dailymean-UK-NUTS-cleaned.RDS)
-* [UK LTLAs (Lower-tier local authorities; districts, boroughs or city councils)](https://github.com/pearselab/areadata/raw/main/output/humid-dailymean-UK-LTLA-cleaned.RDS)
+* [GID level 0 (Countries)](https://github.com/pearselab/areadata/raw/main/output/relhumid-dailymean-countries-cleaned.RDS)
+* [GID level 1 (States)](https://github.com/pearselab/areadata/raw/main/output/relhumid-dailymean-GID1-cleaned.RDS)
+* [GID level 2 (Counties)](https://github.com/pearselab/areadata/raw/main/output/relhumid-dailymean-GID2-cleaned.RDS)
+* [UK NUTS 1 regions (Nomenclature of Territorial Units for Statistics; comprising Wales, Scotland, Northern Ireland, and 9 regions of England)](https://github.com/pearselab/areadata/raw/main/output/relhumid-dailymean-UK-NUTS-cleaned.RDS)
+* [UK LTLAs (Lower-tier local authorities; districts, boroughs or city councils)](https://github.com/pearselab/areadata/raw/main/output/relhumid-dailymean-UK-LTLA-cleaned.RDS)
 
 ### Surface UV Radiation
 

@@ -22,13 +22,13 @@ Shapefiles for UK NUTS and LTLA regions were acquired from the office for nation
 
 ### Daily climate variables
 
-Daily climate data were acquired from the Coperincus Climate Data Store (CDS); temperature and relative humidity from ERA5 hourly data on pressure levels (at 1000 hpa - surface level atmospheric pressure), UV and precipitation from ERA5 hourly data on single levels (surface level):
+Daily climate data were acquired from the Coperincus Climate Data Store (CDS); temperature, specific humidity, and relative humidity from ERA5 hourly data on pressure levels (at 1000 hpa - surface level atmospheric pressure), UV and precipitation from ERA5 hourly data on single levels (surface level):
 
 Hersbach, H., Bell, B., Berrisford, P., Biavati, G., Horányi, A., Muñoz Sabater, J., Nicolas, J., Peubey, C., Radu, R., Rozum, I., Schepers, D., Simmons, A., Soci, C., Dee, D., Thépaut, J-N. (2018): ERA5 hourly data on pressure levels from 1979 to present. Copernicus Climate Change Service (C3S) Climate Data Store (CDS). 10.24381/cds.bd0915c6
 
 Hersbach, H., Bell, B., Berrisford, P., Biavati, G., Horányi, A., Muñoz Sabater, J., Nicolas, J., Peubey, C., Radu, R., Rozum, I., Schepers, D., Simmons, A., Soci, C., Dee, D., Thépaut, J-N. (2018): ERA5 hourly data on single levels from 1979 to present. Copernicus Climate Change Service (C3S) Climate Data Store (CDS). 10.24381/cds.adbb2d47 
 
-Temperature is given in degrees Celsius, humidity is the relative humidity % (water vapour pressure as a percentage of the air saturatation value), UV is the the amount of UV radiation reaching the surface (J m<sup>-2</sup>), and precipitation is the accumulated liquid and frozen water falling to the Earth's surface, depth in metres of water equivalent.
+Temperature is given in degrees Celsius, specific humidity is the mass of water per mass of air (kg/kg), the relative humidity is water vapour pressure as a percentage of the air saturatation value (%), UV is the the amount of UV radiation reaching the surface (J m<sup>-2</sup>), and precipitation is the accumulated liquid and frozen water falling to the Earth's surface, depth in metres of water equivalent.
 
 ### Population density
 
