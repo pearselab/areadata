@@ -3,6 +3,7 @@
 # 
 
 source("src/packages.R")
+source("src/functions.R")
 
 # Get countries and states
 countries <- shapefile("data/gis/gadm-countries.shp")
@@ -22,12 +23,12 @@ UK_LTLA_reproj <- spTransform(UK_LTLA, crs(pop_data))
 UK_STP_reproj <- spTransform(UK_STP, crs(pop_data))
 
 # extract across regions
-c.popdensity <- raster::extract(x = pop_data, y = countries, fun=function(x, na.rm = TRUE)median(x, na.rm = TRUE), small = TRUE)
-s.popdensity <- raster::extract(x = pop_data, y = states, fun=function(x, na.rm = TRUE)median(x, na.rm = TRUE), small = TRUE)
-ct.popdensity <- raster::extract(x = pop_data, y = counties, fun=function(x, na.rm = TRUE)median(x, na.rm = TRUE), small = TRUE)
-UK_NUTS.popdensity <- raster::extract(x = pop_data, y = UK_NUTS_reproj, fun=function(x, na.rm = TRUE)median(x, na.rm = TRUE), small = TRUE)
-UK_LTLA.popdensity <- raster::extract(x = pop_data, y = UK_LTLA_reproj, fun=function(x, na.rm = TRUE)median(x, na.rm = TRUE), small = TRUE)
-UK_STP.popdensity <- raster::extract(x = pop_data, y = UK_STP_reproj, fun=function(x, na.rm = TRUE)median(x, na.rm = TRUE), small = TRUE)
+c.popdensity <- exact_extract(x = pop_data, y = countries, "mean", force_df = TRUE)
+s.popdensity <- exact_extract(x = pop_data, y = states, "mean", force_df = TRUE)
+ct.popdensity <- exact_extract(x = pop_data, y = counties, "mean", force_df = TRUE)
+UK_NUTS.popdensity <- exact_extract(x = pop_data, y = UK_NUTS_reproj, "mean", force_df = TRUE)
+UK_LTLA.popdensity <- exact_extract(x = pop_data, y = UK_LTLA_reproj, "mean", force_df = TRUE)
+UK_STP.popdensity <- exact_extract(x = pop_data, y = UK_STP_reproj, "mean", force_df = TRUE)
 
 # add names
 dimnames(c.popdensity) <- list(
