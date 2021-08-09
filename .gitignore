@@ -14,6 +14,7 @@
 /output/*.png
 
 # don't save the archive files to the github
+data/archive/*
 output/archive/*
 
 # stuff from the github pages build
