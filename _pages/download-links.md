@@ -29,7 +29,7 @@ Matrices of daily climate estimates by spatial units (rows) and by date (columns
 * [UK NUTS 1 regions (Nomenclature of Territorial Units for Statistics; comprising Wales, Scotland, Northern Ireland, and 9 regions of England)](https://github.com/pearselab/areadata/raw/main/output/temp-dailymean-UK-NUTS-cleaned.RDS)
 * [UK LTLAs (Lower-tier local authorities; districts, boroughs or city councils)](https://github.com/pearselab/areadata/raw/main/output/temp-dailymean-UK-LTLA-cleaned.RDS)
 
-### Specific (Absolute) Humidity
+### Specific Humidity
 
 * [GID level 0 (Countries)](https://github.com/pearselab/areadata/raw/main/output/spechumid-dailymean-countries-cleaned.RDS)
 * [GID level 1 (States)](https://github.com/pearselab/areadata/raw/main/output/spechumid-dailymean-GID1-cleaned.RDS)
