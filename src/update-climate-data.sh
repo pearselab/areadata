@@ -80,3 +80,9 @@ echo "Average daily climate data across spatial regions"
 Rscript src/update-cds-era5.R -y $year -m $monthlist, -v $climatelist -c $cores
 
 echo "... Finished averaging across regions! Files written to output directory!"
+
+echo "Generating new hashes"
+
+md5sum output/* > output/hashes
+
+echo "Done"
