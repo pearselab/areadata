@@ -8,6 +8,7 @@ dd2cc6061fe1f0532499cc509f2df924  output/annual-mean-temperature-forecast-GID2.R
 8f80d8895f88b99d9d765c6624225c10  output/annual-mean-temperature-forecast-UK-LTLA.zip
 e2f9b0e555f60c22094ee19dc4463210  output/annual-mean-temperature-forecast-UK-NUTS.RDS
 86bb845ff38b2d93612816f0fabf0c44  output/annual-mean-temperature-forecast-UK-NUTS.zip
+5a132adab805345883e3a69a00db7aa3  output/hashes
 953b59f2753048153fc2e1b8cf52d643  output/population-density-countries.RDS
 105296811934689b13764e28d323df24  output/population-density-countries.zip
 2548aa65bbd4f842a7481e7a6de46182  output/population-density-GID1.RDS
@@ -30,7 +31,7 @@ f03ed72d3bb42e8ec23205313b08b516  output/precip-dailymean-GID2-cleaned.zip
 110abae64c7f1590a313fa5a89bf210a  output/precip-dailymean-UK-NUTS-cleaned.RDS
 736a3291f0516147bd4f29e990ce5a49  output/precip-dailymean-UK-NUTS-cleaned.zip
 ab203f90660f3ea8130caa7e8971f856  output/precip-dailymean-UK-STP-cleaned.RDS
-57a72fc8145278ce0f8c1aee173542c8  output/precip-dailymean-UK-STP-cleaned.txt
+95700dbd6edd55a27ad42bea5d4351f0  output/precip-dailymean-UK-STP-cleaned.zip
 491331e5821c7cc476d7187b73bef989  output/relhumid-dailymean-countries-cleaned.RDS
 4e7128e0ed7694c7894cad61618a72b0  output/relhumid-dailymean-countries-cleaned.zip
 b397ee71b6319400d0a3b4757dc676ce  output/relhumid-dailymean-GID1-cleaned.RDS
@@ -42,7 +43,7 @@ d3af10182e7dd7265539d5725a21f641  output/relhumid-dailymean-UK-LTLA-cleaned.RDS
 a2208dd23d61e76849eed8b52de6ba1e  output/relhumid-dailymean-UK-NUTS-cleaned.RDS
 1ee886977c6f88125eb97d35734e1602  output/relhumid-dailymean-UK-NUTS-cleaned.zip
 93f151fd4ba89ca4ac04451827873522  output/relhumid-dailymean-UK-STP-cleaned.RDS
-1a1c3c3cf8a44ad2441aae7fc24b6441  output/relhumid-dailymean-UK-STP-cleaned.txt
+32fb2155b4b989703e2881813a225c9a  output/relhumid-dailymean-UK-STP-cleaned.zip
 1479bd9a4f7dde6ea0dc56214e6a15a8  output/spechumid-dailymean-countries-cleaned.RDS
 a3c443f50a9a939b9ad8aad22feaacac  output/spechumid-dailymean-countries-cleaned.zip
 cffb9ca71aef1e2d0e7a4e5d4047d87e  output/spechumid-dailymean-GID1-cleaned.RDS
@@ -54,7 +55,7 @@ abfc71ff30833594a85f70c79c15ca13  output/spechumid-dailymean-UK-LTLA-cleaned.zip
 0d7986b2822d8046bc6874fc6c917eda  output/spechumid-dailymean-UK-NUTS-cleaned.RDS
 aabefcb6987bdbab224dcf865049777e  output/spechumid-dailymean-UK-NUTS-cleaned.zip
 77e26c993548df1b869c84dc93e08dd4  output/spechumid-dailymean-UK-STP-cleaned.RDS
-bf925c0f0671476efcd4c05c731366a0  output/spechumid-dailymean-UK-STP-cleaned.txt
+f0eaafc3ed5a23779b681322ca6d2f52  output/spechumid-dailymean-UK-STP-cleaned.zip
 4699c0604694a845dd2c48ef424a8994  output/temp-dailymean-countries-cleaned.RDS
 e17f776ba07e08dd5ec3eb6c3d26331c  output/temp-dailymean-countries-cleaned.zip
 25c154d97eb03de60da527d98260cc90  output/temp-dailymean-GID1-cleaned.RDS
@@ -66,7 +67,7 @@ c6e9429b43a8030782f5570c000d82dc  output/temp-dailymean-GID2-cleaned.zip
 1809556e9090626caede915ac4e37fcd  output/temp-dailymean-UK-NUTS-cleaned.RDS
 78a933806ec9e7c602dc7d12024df897  output/temp-dailymean-UK-NUTS-cleaned.zip
 2699f436e93b44e9fdc3879478c4d13c  output/temp-dailymean-UK-STP-cleaned.RDS
-cf565df96b2a4bf1931d832aa3fd8587  output/temp-dailymean-UK-STP-cleaned.txt
+47157c63215cd6109ca985b9ebc0e528  output/temp-dailymean-UK-STP-cleaned.zip
 e87056a9076d758eeb003c7df8ff08c1  output/uv-dailymean-countries-cleaned.RDS
 74be280cabf6f110ce1e6fccd71cc255  output/uv-dailymean-countries-cleaned.zip
 63c343e4cef90715228ded59e10ffe1f  output/uv-dailymean-GID1-cleaned.RDS
@@ -78,4 +79,4 @@ c28e239fb2c53565c875c13ecbfed617  output/uv-dailymean-UK-LTLA-cleaned.zip
 fd4747324aa4d95db2a26b968ac944a0  output/uv-dailymean-UK-NUTS-cleaned.RDS
 fa4d10c23b4846f07654bb4e1c4acb57  output/uv-dailymean-UK-NUTS-cleaned.zip
 894272dd25fc8b201158a9de5476615e  output/uv-dailymean-UK-STP-cleaned.RDS
-0a3e9677ca8917ff12b079efc3252119  output/uv-dailymean-UK-STP-cleaned.txt
+96e3c48c6385ba0e0e52447f22ac5eb2  output/uv-dailymean-UK-STP-cleaned.zip

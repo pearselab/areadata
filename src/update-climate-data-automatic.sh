@@ -16,8 +16,8 @@ done
 # get year and month to update, based on current date
 # we're going to run this once a month and update the previous months data
 
-year=`date -d "- 2 month" +%Y`
-months=`date -d "- 2 month" +%m`
+year=`date -d "- 1 month" +%Y`
+months=`date -d "- 1 month" +%m`
 
 echo "Updating climate data for:"
 echo "Climate variable(s): $climvar";
@@ -98,30 +98,35 @@ then
   zip -m -T output/temp-dailymean-GID2-cleaned.zip output/temp-dailymean-GID2-cleaned.txt
   zip -m -T output/temp-dailymean-UK-LTLA-cleaned.zip output/temp-dailymean-UK-LTLA-cleaned.txt
   zip -m -T output/temp-dailymean-UK-NUTS-cleaned.zip output/temp-dailymean-UK-NUTS-cleaned.txt
+  zip -m -T output/temp-dailymean-UK-STP-cleaned.zip output/temp-dailymean-UK-STP-cleaned.txt
 
   zip -m -T output/spechumid-dailymean-countries-cleaned.zip output/spechumid-dailymean-countries-cleaned.txt
   zip -m -T output/spechumid-dailymean-GID1-cleaned.zip output/spechumid-dailymean-GID1-cleaned.txt
   zip -m -T output/spechumid-dailymean-GID2-cleaned.zip output/spechumid-dailymean-GID2-cleaned.txt
   zip -m -T output/spechumid-dailymean-UK-LTLA-cleaned.zip output/spechumid-dailymean-UK-LTLA-cleaned.txt
   zip -m -T output/spechumid-dailymean-UK-NUTS-cleaned.zip output/spechumid-dailymean-UK-NUTS-cleaned.txt
+  zip -m -T output/spechumid-dailymean-UK-STP-cleaned.zip output/spechumid-dailymean-UK-STP-cleaned.txt
 
   zip -m -T output/relhumid-dailymean-countries-cleaned.zip output/relhumid-dailymean-countries-cleaned.txt
   zip -m -T output/relhumid-dailymean-GID1-cleaned.zip output/relhumid-dailymean-GID1-cleaned.txt
   zip -m -T output/relhumid-dailymean-GID2-cleaned.zip output/relhumid-dailymean-GID2-cleaned.txt
   zip -m -T output/relhumid-dailymean-UK-LTLA-cleaned.zip output/relhumid-dailymean-UK-LTLA-cleaned.txt
   zip -m -T output/relhumid-dailymean-UK-NUTS-cleaned.zip output/relhumid-dailymean-UK-NUTS-cleaned.txt
+  zip -m -T output/relhumid-dailymean-UK-STP-cleaned.zip output/relhumid-dailymean-UK-STP-cleaned.txt
 
   zip -m -T output/precip-dailymean-countries-cleaned.zip output/precip-dailymean-countries-cleaned.txt
   zip -m -T output/precip-dailymean-GID1-cleaned.zip output/precip-dailymean-GID1-cleaned.txt
   zip -m -T output/precip-dailymean-GID2-cleaned.zip output/precip-dailymean-GID2-cleaned.txt
   zip -m -T output/precip-dailymean-UK-LTLA-cleaned.zip output/precip-dailymean-UK-LTLA-cleaned.txt
   zip -m -T output/precip-dailymean-UK-NUTS-cleaned.zip output/precip-dailymean-UK-NUTS-cleaned.txt
+  zip -m -T output/precip-dailymean-UK-STP-cleaned.zip output/precip-dailymean-UK-STP-cleaned.txt
 
   zip -m -T output/uv-dailymean-countries-cleaned.zip output/uv-dailymean-countries-cleaned.txt
   zip -m -T output/uv-dailymean-GID1-cleaned.zip output/uv-dailymean-GID1-cleaned.txt
   zip -m -T output/uv-dailymean-GID2-cleaned.zip output/uv-dailymean-GID2-cleaned.txt
   zip -m -T output/uv-dailymean-UK-LTLA-cleaned.zip output/uv-dailymean-UK-LTLA-cleaned.txt
   zip -m -T output/uv-dailymean-UK-NUTS-cleaned.zip output/uv-dailymean-UK-NUTS-cleaned.txt
+  zip -m -T output/uv-dailymean-UK-STP-cleaned.zip output/uv-dailymean-UK-STP-cleaned.txt
 
   echo "...Generating new hashes..."
   md5sum output/* > output/hashes
