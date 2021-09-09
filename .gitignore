@@ -20,3 +20,9 @@ output/archive/*
 # stuff from the github pages build
 _site/
 .jekyll-cache/
+
+# figshare API token
+areadata-token.txt
+
+# GID2 output files
+/output/*dailymean-GID2*
