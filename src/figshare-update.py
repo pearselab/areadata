@@ -153,6 +153,12 @@ def delete_item(article_id, file_id):
     issue_request('DELETE', 'account/articles/{}/files/{}'.format(article_id, file_id))
 
 
+# "When an article is published, a new public version will be generated. Any further updates to the article will affect the private article data. 
+# In order to make these changes publicly visible, an explicit publish operation is needed."
+def publish_article(article_id):
+    issue_request('POST', 'account/articles/{}/files/{}'.format(article_id))
+
+
 def main():
     # We are going to delete all the files in the article (specified above)
     # then replace them with the newly created GID2 files
@@ -216,6 +222,8 @@ def main():
     
     # End by listing the files in the article now
     list_files_of_article(ARTICLE_ID)
+    # and publish the changes:
+    publish_article(ARTICLE_ID)
 
 
 if __name__ == '__main__':

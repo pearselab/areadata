@@ -1,6 +1,6 @@
 #!/bin/bash
-cd output
-md5sum --status --check hashes
+# cd output
+md5sum --status --check output/hashes
 Result=$?
 if [[ "$Result" == "0" ]]; then
   Outcome="success"
