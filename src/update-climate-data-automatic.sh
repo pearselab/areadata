@@ -137,7 +137,7 @@ then
   echo ".. pushing changes to git"
   git add -A
   git commit -m "updated data for $months $year"
-  #git push origin main # do we need to put something here so git doesn't ask for a password... sudo?
+  git push origin main
   echo "... Finished averaging across regions! Files written to output directory and pushed to Git!"
 else
   echo "Errors encountered:"

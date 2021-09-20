@@ -156,7 +156,7 @@ def delete_item(article_id, file_id):
 # "When an article is published, a new public version will be generated. Any further updates to the article will affect the private article data. 
 # In order to make these changes publicly visible, an explicit publish operation is needed."
 def publish_article(article_id):
-    issue_request('POST', 'account/articles/{}'.format(article_id))
+    issue_request('POST', 'account/articles/{}/publish'.format(article_id))
 
 
 def main():
