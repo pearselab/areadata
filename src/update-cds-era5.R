@@ -116,6 +116,13 @@ if("temperature" %in% climvars){
     saveRDS(UK_NUTS.temp, "output/temp-dailymean-UK-NUTS-cleaned.RDS")
     saveRDS(UK_LTLA.temp, "output/temp-dailymean-UK-LTLA-cleaned.RDS")
     saveRDS(UK_STP.temp, "output/temp-dailymean-UK-STP-cleaned.RDS")
+    # also save tab delimited versions
+    write.table(c.temp, "output/temp-dailymean-countries-cleaned.txt")
+    write.table(s.temp, "output/temp-dailymean-GID1-cleaned.txt")
+    write.table(ct.temp, "output/temp-dailymean-GID2-cleaned.txt")
+    write.table(UK_NUTS.temp, "output/temp-dailymean-UK-NUTS-cleaned.txt")
+    write.table(UK_LTLA.temp, "output/temp-dailymean-UK-LTLA-cleaned.txt")
+    write.table(UK_STP.temp, "output/temp-dailymean-UK-STP-cleaned.txt")
     
     # save a backup of the older data
     enddate <- max(colnames(old.c.temp))
@@ -180,6 +187,13 @@ if("spec_humid" %in% climvars){
     saveRDS(UK_NUTS.spechumid, "output/spechumid-dailymean-UK-NUTS-cleaned.RDS")
     saveRDS(UK_LTLA.spechumid, "output/spechumid-dailymean-UK-LTLA-cleaned.RDS")
     saveRDS(UK_STP.spechumid, "output/spechumid-dailymean-UK-STP-cleaned.RDS")
+    # also save tab delimited versions
+    write.table(c.spechumid, "output/spechumid-dailymean-countries-cleaned.txt")
+    write.table(s.spechumid, "output/spechumid-dailymean-GID1-cleaned.txt")
+    write.table(ct.spechumid, "output/spechumid-dailymean-GID2-cleaned.txt")
+    write.table(UK_NUTS.spechumid, "output/spechumid-dailymean-UK-NUTS-cleaned.txt")
+    write.table(UK_LTLA.spechumid, "output/spechumid-dailymean-UK-LTLA-cleaned.txt")
+    write.table(UK_STP.spechumid, "output/spechumid-dailymean-UK-STP-cleaned.txt")
     
     # save a backup of the older data
     enddate <- max(colnames(old.c.spechumid))
@@ -244,6 +258,13 @@ if("rel_humid" %in% climvars){
     saveRDS(UK_NUTS.relhumid, "output/relhumid-dailymean-UK-NUTS-cleaned.RDS")
     saveRDS(UK_LTLA.relhumid, "output/relhumid-dailymean-UK-LTLA-cleaned.RDS")
     saveRDS(UK_STP.relhumid, "output/relhumid-dailymean-UK-STP-cleaned.RDS")
+    # also save tab delimited versions
+    write.table(c.relhumid, "output/relhumid-dailymean-countries-cleaned.txt")
+    write.table(s.relhumid, "output/relhumid-dailymean-GID1-cleaned.txt")
+    write.table(ct.relhumid, "output/relhumid-dailymean-GID2-cleaned.txt")
+    write.table(UK_NUTS.relhumid, "output/relhumid-dailymean-UK-NUTS-cleaned.txt")
+    write.table(UK_LTLA.relhumid, "output/relhumid-dailymean-UK-LTLA-cleaned.txt")
+    write.table(UK_STP.relhumid, "output/relhumid-dailymean-UK-STP-cleaned.txt")
     
     # save a backup of the older data
     enddate <- max(colnames(old.c.relhumid))
@@ -309,6 +330,13 @@ if("uv" %in% climvars){
     saveRDS(UK_NUTS.uv, "output/uv-dailymean-UK-NUTS-cleaned.RDS")
     saveRDS(UK_LTLA.uv, "output/uv-dailymean-UK-LTLA-cleaned.RDS")
     saveRDS(UK_STP.uv, "output/uv-dailymean-UK-STP-cleaned.RDS")
+    # also save tab delimited versions
+    write.table(c.uv, "output/uv-dailymean-countries-cleaned.txt")
+    write.table(s.uv, "output/uv-dailymean-GID1-cleaned.txt")
+    write.table(ct.uv, "output/uv-dailymean-GID2-cleaned.txt")
+    write.table(UK_NUTS.uv, "output/uv-dailymean-UK-NUTS-cleaned.txt")
+    write.table(UK_LTLA.uv, "output/uv-dailymean-UK-LTLA-cleaned.txt")
+    write.table(UK_STP.uv, "output/uv-dailymean-UK-STP-cleaned.txt")
     
     # save a backup of the older data
     enddate <- max(colnames(old.c.uv))
@@ -374,6 +402,13 @@ if("precipitation" %in% climvars){
     saveRDS(UK_NUTS.precip, "output/precip-dailymean-UK-NUTS-cleaned.RDS")
     saveRDS(UK_LTLA.precip, "output/precip-dailymean-UK-LTLA-cleaned.RDS")
     saveRDS(UK_STP.precip, "output/precip-dailymean-UK-STP-cleaned.RDS")
+    # also save tab delimited versions
+    write.table(c.precip, "output/precip-dailymean-countries-cleaned.txt")
+    write.table(s.precip, "output/precip-dailymean-GID1-cleaned.txt")
+    write.table(ct.precip, "output/precip-dailymean-GID2-cleaned.txt")
+    write.table(UK_NUTS.precip, "output/precip-dailymean-UK-NUTS-cleaned.txt")
+    write.table(UK_LTLA.precip, "output/precip-dailymean-UK-LTLA-cleaned.txt")
+    write.table(UK_STP.precip, "output/precip-dailymean-UK-STP-cleaned.txt")
     
     # save a backup of the older data
     enddate <- max(colnames(old.c.precip))
@@ -387,4 +422,4 @@ if("precipitation" %in% climvars){
 
 
 # Save a file with the date that these data have been updated to
-# write.table(max(all_dates[!is.na(all_dates$date),]$date), "output/update-datestamp.txt") # improve this...
+# cat(max(all_dates),file="output/update-datestamp.txt") # improve this...
