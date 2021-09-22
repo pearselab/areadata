@@ -78,3 +78,15 @@ Fick, S.E. and R.J. Hijmans, 2017. WorldClim 2: new 1km spatial resolution clima
    * By default this will download and clean data for Jan 2020. You could modify the starting date if you wish by changing the arguments in the calls to the python and R scripts, or add new climate variables in the python scripts, but this will be more involved.
    * This generates the first round of data files for the update script to then run off.
  
+
+## Validation
+
+1. Run an md5sum check to ensure downloaded data is the same as released data
+   * Download the external data from [figshare](https://doi.org/10.6084/m9.figshare.16587311) and add to /output/ directory 
+   * Run the md5sum check code: `bash src/md5sum-check.sh`
+
+2. Check for duplicate rows in the data
+   * `Rscript src/duplication-test.R`
+
+3. Reproduce output figures
+   * Follow instructions in R code `src/validation-figures.R`. Do read the script and follow line-by-line as this will not work from a direct `Rscript` call unless some pre-requisite files are downloaded.
