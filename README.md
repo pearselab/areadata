@@ -5,7 +5,7 @@
 
 RDS files with averaged climate variables across countries (GID.0), states (GID.1) and counties (GID.2) available in /output. 
 The most updated version's name is appended with -cleaned.RDS. 
-Currently this is available for temperature, humidity, precipitation and UV.
+Currently this is available for temperature, specific humidity, relative humidity, precipitation and UV.
 
 Metadata linking country/state/county names to GID identifiers given in /data/name-matching.csv
 
@@ -27,7 +27,7 @@ Shapefiles for UK NUTS and LTLA regions were acquired from the office for nation
 
 ### Daily climate variables
 
-Daily climate data were acquired from the Coperincus Climate Data Store (CDS); temperature and relative humidity from ERA5 hourly data on pressure levels, UV and precipitation from ERA5 hourly data on single levels:
+Daily climate data were acquired from the Coperincus Climate Data Store (CDS); temperature, specific humidity and relative humidity from ERA5 hourly data on pressure levels, UV and precipitation from ERA5 hourly data on single levels:
 
 Hersbach, H., Bell, B., Berrisford, P., Biavati, G., Horányi, A., Muñoz Sabater, J., Nicolas, J., Peubey, C., Radu, R., Rozum, I., Schepers, D., Simmons, A., Soci, C., Dee, D., Thépaut, J-N. (2018): ERA5 hourly data on pressure levels from 1979 to present. Copernicus Climate Change Service (C3S) Climate Data Store (CDS). 10.24381/cds.bd0915c6
 
