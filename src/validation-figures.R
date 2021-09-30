@@ -55,6 +55,52 @@ pdf("output/fig_1_c.pdf", width = 9, height = 5)
 c.plot
 dev.off()
 
+# repeat for states
+states <- st_read("data/gis/gadm-states.shp")
+s.temp <- readRDS("output/temp-dailymean-GID1-cleaned.RDS")
+
+states$temperature <- s.temp[,1]
+
+s.plot <- ggplot(states) +
+  geom_sf(aes(fill = temperature)) +
+  scale_fill_viridis(limits = c(-45, 41)) +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        panel.border = element_blank(),
+        legend.position = "none")
+s.plot
+
+pdf("output/fig_1_d.pdf", width = 9, height = 5)
+s.plot
+dev.off()
+
+# repeat for counties
+counties <- st_read("data/gis/gadm-counties.shp")
+ct.temp <- readRDS("output/temp-dailymean-GID2-cleaned.RDS")
+
+counties$temperature <- ct.temp[,1]
+
+# see if we can add in the missing GID0 regions (e.g. greenland, libya, etc) back into the GID2 file
+missing_countries <- countries[!(countries$GID_0 %in% counties$GID_0),]
+
+missing_countries$GID_1 <- missing_countries$NAME_1 <- missing_countries$NL_NAME_1 <- missing_countries$GID_2 <-
+  missing_countries$NAME_2 <- missing_countries$VARNAME_2 <- missing_countries$NL_NAME_2 <- missing_countries$TYPE_2 <-
+  missing_countries$ENGTYPE_2 <- missing_countries$CC_2 <- missing_countries$HASC_2 <- missing_countries$temperature <- NA
+
+counties_extra <- rbind(counties, missing_countries)
+
+ct.plot <- ggplot(counties_extra) +
+  geom_sf(aes(fill = temperature), lwd = 0) +
+  scale_fill_viridis(limits = c(-45, 41)) +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        panel.border = element_blank(),
+        legend.position = "none")
+ct.plot
+
+png("output/fig_1_e.png", width = 900, height = 500)
+ct.plot
+dev.off()
 
 ## -------------- FIGURE 2 -------------- ##
 
@@ -287,14 +333,14 @@ wb_vs_areadata <- ggplot(combined_data, aes(x = wb_temp, y = areadata_temp)) +
   geom_abline(slope = 1) +
   geom_smooth(method = lm) +
   facet_wrap(~month) +
-  labs(x = "CCKP Temperature", y = "AREAdata Temperature") +
+  labs(x = "CCKP Temperature (°C)", y = "AREAdata Temperature (°C)") +
   theme_bw() +
   theme(axis.text = element_text(size = 14),
         axis.title = element_text(size = 16),
         strip.text = element_text(size = 14),
         aspect.ratio = 1)
 
-pdf("fig_4.pdf")
+pdf("output/fig_4.pdf")
 wb_vs_areadata
 dev.off()
 
