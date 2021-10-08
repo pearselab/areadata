@@ -173,6 +173,7 @@ def main():
         list_files_of_article(ARTICLE_ID)
 
     # Then we upload the new files
+    # Temperature
     print('Uploading Temperature Data')
     file_info = initiate_new_upload(ARTICLE_ID, 'output/temp-dailymean-GID2-cleaned.RDS')
     # Until here we used the figshare API; following lines use the figshare upload service API.
@@ -184,6 +185,23 @@ def main():
     upload_parts(file_info, 'output/temp-dailymean-GID2-cleaned.zip')
     complete_upload(ARTICLE_ID, file_info['id'])
 
+    file_info = initiate_new_upload(ARTICLE_ID, 'output/temp-dailymean-GID1-cleaned.RDS')
+    upload_parts(file_info, 'output/temp-dailymean-GID1-cleaned.RDS')
+    complete_upload(ARTICLE_ID, file_info['id'])
+
+    file_info = initiate_new_upload(ARTICLE_ID, 'output/temp-dailymean-GID1-cleaned.zip')
+    upload_parts(file_info, 'output/temp-dailymean-GID1-cleaned.zip')
+    complete_upload(ARTICLE_ID, file_info['id'])
+
+    file_info = initiate_new_upload(ARTICLE_ID, 'output/temp-dailymean-countries-cleaned.RDS')
+    upload_parts(file_info, 'output/temp-dailymean-countries-cleaned.RDS')
+    complete_upload(ARTICLE_ID, file_info['id'])
+
+    file_info = initiate_new_upload(ARTICLE_ID, 'output/temp-dailymean-countries-cleaned.zip')
+    upload_parts(file_info, 'output/temp-dailymean-countries-cleaned.zip')
+    complete_upload(ARTICLE_ID, file_info['id'])
+
+    # Specific humidity
     print('Uploading Specific Humidity Data')
     file_info = initiate_new_upload(ARTICLE_ID, 'output/spechumid-dailymean-GID2-cleaned.RDS')
     upload_parts(file_info, 'output/spechumid-dailymean-GID2-cleaned.RDS')
@@ -193,6 +211,23 @@ def main():
     upload_parts(file_info, 'output/spechumid-dailymean-GID2-cleaned.zip')
     complete_upload(ARTICLE_ID, file_info['id'])
 
+    file_info = initiate_new_upload(ARTICLE_ID, 'output/spechumid-dailymean-GID1-cleaned.RDS')
+    upload_parts(file_info, 'output/spechumid-dailymean-GID1-cleaned.RDS')
+    complete_upload(ARTICLE_ID, file_info['id'])
+
+    file_info = initiate_new_upload(ARTICLE_ID, 'output/spechumid-dailymean-GID1-cleaned.zip')
+    upload_parts(file_info, 'output/spechumid-dailymean-GID1-cleaned.zip')
+    complete_upload(ARTICLE_ID, file_info['id'])
+
+    file_info = initiate_new_upload(ARTICLE_ID, 'output/spechumid-dailymean-countries-cleaned.RDS')
+    upload_parts(file_info, 'output/spechumid-dailymean-countries-cleaned.RDS')
+    complete_upload(ARTICLE_ID, file_info['id'])
+
+    file_info = initiate_new_upload(ARTICLE_ID, 'output/spechumid-dailymean-countries-cleaned.zip')
+    upload_parts(file_info, 'output/spechumid-dailymean-countries-cleaned.zip')
+    complete_upload(ARTICLE_ID, file_info['id'])
+
+    # Relative humidity
     print('Uploading Relative Humidity Data')
     file_info = initiate_new_upload(ARTICLE_ID, 'output/relhumid-dailymean-GID2-cleaned.RDS')
     upload_parts(file_info, 'output/relhumid-dailymean-GID2-cleaned.RDS')
@@ -202,6 +237,23 @@ def main():
     upload_parts(file_info, 'output/relhumid-dailymean-GID2-cleaned.zip')
     complete_upload(ARTICLE_ID, file_info['id'])
 
+    file_info = initiate_new_upload(ARTICLE_ID, 'output/relhumid-dailymean-GID1-cleaned.RDS')
+    upload_parts(file_info, 'output/relhumid-dailymean-GID1-cleaned.RDS')
+    complete_upload(ARTICLE_ID, file_info['id'])
+
+    file_info = initiate_new_upload(ARTICLE_ID, 'output/relhumid-dailymean-GID1-cleaned.zip')
+    upload_parts(file_info, 'output/relhumid-dailymean-GID1-cleaned.zip')
+    complete_upload(ARTICLE_ID, file_info['id'])
+
+    file_info = initiate_new_upload(ARTICLE_ID, 'output/relhumid-dailymean-countries-cleaned.RDS')
+    upload_parts(file_info, 'output/relhumid-dailymean-countries-cleaned.RDS')
+    complete_upload(ARTICLE_ID, file_info['id'])
+
+    file_info = initiate_new_upload(ARTICLE_ID, 'output/relhumid-dailymean-countries-cleaned.zip')
+    upload_parts(file_info, 'output/relhumid-dailymean-countries-cleaned.zip')
+    complete_upload(ARTICLE_ID, file_info['id'])
+
+    # UV
     print('Uploading UV Data')
     file_info = initiate_new_upload(ARTICLE_ID, 'output/uv-dailymean-GID2-cleaned.RDS')
     upload_parts(file_info, 'output/uv-dailymean-GID2-cleaned.RDS')
@@ -211,6 +263,23 @@ def main():
     upload_parts(file_info, 'output/uv-dailymean-GID2-cleaned.zip')
     complete_upload(ARTICLE_ID, file_info['id'])
 
+    file_info = initiate_new_upload(ARTICLE_ID, 'output/uv-dailymean-GID1-cleaned.RDS')
+    upload_parts(file_info, 'output/uv-dailymean-GID1-cleaned.RDS')
+    complete_upload(ARTICLE_ID, file_info['id'])
+
+    file_info = initiate_new_upload(ARTICLE_ID, 'output/uv-dailymean-GID1-cleaned.zip')
+    upload_parts(file_info, 'output/uv-dailymean-GID1-cleaned.zip')
+    complete_upload(ARTICLE_ID, file_info['id'])
+
+    file_info = initiate_new_upload(ARTICLE_ID, 'output/uv-dailymean-countries-cleaned.RDS')
+    upload_parts(file_info, 'output/uv-dailymean-countries-cleaned.RDS')
+    complete_upload(ARTICLE_ID, file_info['id'])
+
+    file_info = initiate_new_upload(ARTICLE_ID, 'output/uv-dailymean-countries-cleaned.zip')
+    upload_parts(file_info, 'output/uv-dailymean-countries-cleaned.zip')
+    complete_upload(ARTICLE_ID, file_info['id'])
+
+    # Precipitation
     print('Uploading Precipitation Data')
     file_info = initiate_new_upload(ARTICLE_ID, 'output/precip-dailymean-GID2-cleaned.RDS')
     upload_parts(file_info, 'output/precip-dailymean-GID2-cleaned.RDS')
@@ -218,6 +287,22 @@ def main():
 
     file_info = initiate_new_upload(ARTICLE_ID, 'output/precip-dailymean-GID2-cleaned.zip')
     upload_parts(file_info, 'output/precip-dailymean-GID2-cleaned.zip')
+    complete_upload(ARTICLE_ID, file_info['id'])
+
+    file_info = initiate_new_upload(ARTICLE_ID, 'output/precip-dailymean-GID1-cleaned.RDS')
+    upload_parts(file_info, 'output/precip-dailymean-GID1-cleaned.RDS')
+    complete_upload(ARTICLE_ID, file_info['id'])
+
+    file_info = initiate_new_upload(ARTICLE_ID, 'output/precip-dailymean-GID1-cleaned.zip')
+    upload_parts(file_info, 'output/precip-dailymean-GID1-cleaned.zip')
+    complete_upload(ARTICLE_ID, file_info['id'])
+
+    file_info = initiate_new_upload(ARTICLE_ID, 'output/precip-dailymean-countries-cleaned.RDS')
+    upload_parts(file_info, 'output/precip-dailymean-countries-cleaned.RDS')
+    complete_upload(ARTICLE_ID, file_info['id'])
+
+    file_info = initiate_new_upload(ARTICLE_ID, 'output/precip-dailymean-countries-cleaned.zip')
+    upload_parts(file_info, 'output/precip-dailymean-countries-cleaned.zip')
     complete_upload(ARTICLE_ID, file_info['id'])
     
     # End by listing the files in the article now
