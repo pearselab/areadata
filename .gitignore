@@ -26,3 +26,6 @@ areadata-token.txt
 
 # GID2 output files
 /output/*dailymean-GID2*
+
+# crontab
+areadata-cron.sh
