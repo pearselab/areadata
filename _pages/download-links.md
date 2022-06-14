@@ -12,6 +12,8 @@ Here we provide links to download the spatially averaged data either as .RDS fil
 See methods page for the processing methods and the units given. Please cite the original data sources when using
 these data (given with the download links and presented at the bottom of this page).
 
+For customised county-level (GID 2) data downloads (subsetting and selecting only part of the data to download), please go to [the R Shiny app](https://smithtp.shinyapps.io/areadata-app)
+
 ## Metadata
 
 Download the metadata linking GID admin codes with place names: [HERE](https://github.com/pearselab/areadata/raw/main/data/name-matching.csv)
@@ -65,6 +67,8 @@ Matrices of future climate forecasts by spatial units (rows) and by each combina
 ## GID level 2 (Counties)
 
 All GID-2 downloads available from figshare: [https://doi.org/10.6084/m9.figshare.16587311](https://doi.org/10.6084/m9.figshare.16587311)
+
+GID-2 downloads can also be customised via our [R Shiny app](https://smithtp.shinyapps.io/areadata-app)
 
 Temperature, speficic humidity, relative humidity citations: 1,3
 
