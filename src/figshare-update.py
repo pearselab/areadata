@@ -153,6 +153,19 @@ def delete_item(article_id, file_id):
     issue_request('DELETE', 'account/articles/{}/files/{}'.format(article_id, file_id))
 
 
+def list_files_to_write(article_id):
+    result = issue_request('GET', 'account/articles/{}/files'.format(article_id))
+    print('Creating file list for article {}:'.format(article_id))
+    if result:
+        files = []
+        for item in result:
+            #print('{id},{name}'.format(**item))
+            files.append('{id},{name}'.format(**item))
+        return files
+    else:
+        print('  No files.')
+
+
 # "When an article is published, a new public version will be generated. Any further updates to the article will affect the private article data. 
 # In order to make these changes publicly visible, an explicit publish operation is needed."
 def publish_article(article_id):
@@ -309,6 +322,12 @@ def main():
     list_files_of_article(ARTICLE_ID)
     # and publish the changes:
     publish_article(ARTICLE_ID)
+    # finally, write a csv with the new list of file names
+    file_list = list_files_to_write(ARTICLE_ID)
+    # try to write it out
+    with open('data/figshare-file-names.csv', 'w') as f:
+        for item in file_list:
+            f.write("%s\n" % item)
 
 
 if __name__ == '__main__':
