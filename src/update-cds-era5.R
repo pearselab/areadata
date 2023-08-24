@@ -72,7 +72,7 @@ if("temperature" %in% climvars){
     # get the UK spatial data into the correct projection
     UK_NUTS_reproj <- st_transform(UK_NUTS, crs(temp[[1]]))
     UK_LTLA_reproj <- st_transform(UK_LTLA, crs(temp[[1]]))
-    UK_STP_reproj <- s_transform(UK_STP, crs(temp[[1]]))
+    UK_STP_reproj <- st_transform(UK_STP, crs(temp[[1]]))
     
     print("averaging temperature across regions...")
     c.temp <- .avg.wrapper(temp, countries)
