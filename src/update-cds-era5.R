@@ -50,12 +50,12 @@ climvars <- strsplit(opt$climvars, ",")[[1]]
 
 # Get countries and states
 print("loading shapefiles...")
-countries <- shapefile("data/gis/gadm-countries.shp")
-states <- shapefile("data/gis/gadm-states.shp")
-counties <- shapefile("data/gis/gadm-counties.shp")
-UK_NUTS <- shapefile("data/gis/NUTS_Level_1_(January_2018)_Boundaries.shp")
-UK_LTLA <- shapefile("data/gis/Local_Authority_Districts_(December_2019)_Boundaries_UK_BFC.shp")
-UK_STP <- shapefile("data/gis/Sustainability_and_Transformation_Partnerships_(April_2021)_EN_BFC.shp")
+countries <- sf::read_sf("data/gis/gadm-countries.shp")
+states <- sf::read_sf("data/gis/gadm-states.shp")
+counties <- sf::read_sf("data/gis/gadm-counties.shp")
+UK_NUTS <- sf::read_sf("data/gis/NUTS_Level_1_(January_2018)_Boundaries.shp")
+UK_LTLA <- sf::read_sf("data/gis/Local_Authority_Districts_(December_2019)_Boundaries_UK_BFC.shp")
+UK_STP <- sf::read_sf("data/gis/Sustainability_and_Transformation_Partnerships_(April_2021)_EN_BFC.shp")
 
 dates <- as.character(all_dates[!is.na(all_dates$date),]$date)
 
@@ -67,13 +67,12 @@ dates <- as.character(all_dates[!is.na(all_dates$date),]$date)
 if("temperature" %in% climvars){
     print("loading temperature data...")
     # Load climate data and subset into rasters for each day of the year
-    temp <- rgdal::readGDAL("data/cds-temp-dailymean.grib")
-    temp <- lapply(seq_along(dates), function(i, sp.df) raster::rotate(raster(.drop.col(i, sp.df))), sp.df=temp)
+    temp <- terra::as.list(terra::rast("data/cds-temp-dailymean.grib"))
     
     # get the UK spatial data into the correct projection
-    UK_NUTS_reproj <- spTransform(UK_NUTS, crs(temp[[1]]))
-    UK_LTLA_reproj <- spTransform(UK_LTLA, crs(temp[[1]]))
-    UK_STP_reproj <- spTransform(UK_STP, crs(temp[[1]]))
+    UK_NUTS_reproj <- st_transform(UK_NUTS, crs(temp[[1]]))
+    UK_LTLA_reproj <- st_transform(UK_LTLA, crs(temp[[1]]))
+    UK_STP_reproj <- st_transform(UK_STP, crs(temp[[1]]))
     
     print("averaging temperature across regions...")
     c.temp <- .avg.wrapper(temp, countries)
@@ -138,13 +137,12 @@ if("temperature" %in% climvars){
 if("spec_humid" %in% climvars){
     print("loading specific humidity data...")
     # Load climate data and subset into rasters for each day of the year
-    spechumid <- rgdal::readGDAL("data/cds-spechumid-dailymean.grib")
-    spechumid <- lapply(seq_along(dates), function(i, sp.df) raster::rotate(raster(.drop.col(i, sp.df))), sp.df=spechumid)
+    spechumid <- terra::as.list(terra::rast("data/cds-spechumid-dailymean.grib"))
     
     # get the UK spatial data into the correct projection
-    UK_NUTS_reproj <- spTransform(UK_NUTS, crs(spechumid[[1]]))
-    UK_LTLA_reproj <- spTransform(UK_LTLA, crs(spechumid[[1]]))
-    UK_STP_reproj <- spTransform(UK_STP, crs(spechumid[[1]]))
+    UK_NUTS_reproj <- st_transform(UK_NUTS, crs(spechumid[[1]]))
+    UK_LTLA_reproj <- st_transform(UK_LTLA, crs(spechumid[[1]]))
+    UK_STP_reproj <- st_transform(UK_STP, crs(spechumid[[1]]))
     
     print("averaging humidity across regions...")
     c.spechumid <- .avg.wrapper(spechumid, countries)
@@ -209,13 +207,12 @@ if("spec_humid" %in% climvars){
 if("rel_humid" %in% climvars){
     print("loading humidity data...")
     # Load climate data and subset into rasters for each day of the year
-    relhumid <- rgdal::readGDAL("data/cds-relhumid-dailymean.grib")
-    relhumid <- lapply(seq_along(dates), function(i, sp.df) raster::rotate(raster(.drop.col(i, sp.df))), sp.df=relhumid)
+    relhumid <- terra::as.list(terra::rast("data/cds-relhumid-dailymean.grib"))
     
     # get the UK spatial data into the correct projection
-    UK_NUTS_reproj <- spTransform(UK_NUTS, crs(relhumid[[1]]))
-    UK_LTLA_reproj <- spTransform(UK_LTLA, crs(relhumid[[1]]))
-    UK_STP_reproj <- spTransform(UK_STP, crs(relhumid[[1]]))
+    UK_NUTS_reproj <- st_transform(UK_NUTS, crs(relhumid[[1]]))
+    UK_LTLA_reproj <- st_transform(UK_LTLA, crs(relhumid[[1]]))
+    UK_STP_reproj <- st_transform(UK_STP, crs(relhumid[[1]]))
     
     print("averaging humidity across regions...")
     c.relhumid <- .avg.wrapper(relhumid, countries)
@@ -281,13 +278,12 @@ if("rel_humid" %in% climvars){
 if("uv" %in% climvars){
     print("loading uv data...")
     # Load climate data and subset into rasters for each day of the year
-    uv <- rgdal::readGDAL("data/cds-uv-dailymean.grib")
-    uv <- lapply(seq_along(dates), function(i, sp.df) raster::rotate(raster(.drop.col(i, sp.df))), sp.df=uv)
+    uv <- terra::as.list(terra::rast("data/cds-uv-dailymean.grib"))
     
     # get the UK spatial data into the correct projection
-    UK_NUTS_reproj <- spTransform(UK_NUTS, crs(uv[[1]]))
-    UK_LTLA_reproj <- spTransform(UK_LTLA, crs(uv[[1]]))
-    UK_STP_reproj <- spTransform(UK_STP, crs(uv[[1]]))
+    UK_NUTS_reproj <- st_transform(UK_NUTS, crs(uv[[1]]))
+    UK_LTLA_reproj <- st_transform(UK_LTLA, crs(uv[[1]]))
+    UK_STP_reproj <- st_transform(UK_STP, crs(uv[[1]]))
     
     print("averaging uv across regions...")
     c.uv <- .avg.wrapper(uv, countries)
@@ -353,13 +349,12 @@ if("uv" %in% climvars){
 if("precipitation" %in% climvars){
     print("loading precipitation data...")
     # Load climate data and subset into rasters for each day of the year
-    precip <- rgdal::readGDAL("data/cds-precip-dailymean.grib")
-    precip <- lapply(seq_along(dates), function(i, sp.df) raster::rotate(raster(.drop.col(i, sp.df))), sp.df=precip)
+    precip <- terra::as.list(terra::rast("data/cds-precip-dailymean.grib"))
     
     # get the UK spatial data into the correct projection
-    UK_NUTS_reproj <- spTransform(UK_NUTS, crs(precip[[1]]))
-    UK_LTLA_reproj <- spTransform(UK_LTLA, crs(precip[[1]]))
-    UK_STP_reproj <- spTransform(UK_STP, crs(precip[[1]]))
+    UK_NUTS_reproj <- st_transform(UK_NUTS, crs(precip[[1]]))
+    UK_LTLA_reproj <- st_transform(UK_LTLA, crs(precip[[1]]))
+    UK_STP_reproj <- st_transform(UK_STP, crs(precip[[1]]))
     
     print("averaging precipitation across regions...")
     c.precip <- .avg.wrapper(precip, countries)
