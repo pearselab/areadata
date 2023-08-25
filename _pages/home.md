@@ -6,10 +6,8 @@ sitemap: false
 permalink: /
 ---
 
-**AREAdata is undergoing some rebuilding, and the automatic updates are currently out of action. Data for the period 01/01/2020 - 30/06/2022 can still be accessed and downloaded, but new data will not be relseased until maintenance has been performed.**
-
 Welcome to AREAdata, a [PearseLab](http://pearselab.com/) data resource where you can download daily estimates of climate/environmental data which have been averaged across different levels of spatial units.
-Additionally, we include data on population density and estimates from future climate forecasting models at the same spatial levels.
+Additionally, we include data on population density and estimates from future climate forecasting models at the same spatial levels. See the [Data in Brief](https://doi.org/10.1016/j.dib.2022.108438) publication for more details.
 
 
 <div markdown="0" id="carousel" class="carousel slide" data-ride="carousel" data-interval="5000" data-pause="hover" >

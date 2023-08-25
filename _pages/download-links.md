@@ -6,8 +6,6 @@ sitemap: false
 permalink: /download-links/
 ---
 
-**AREAdata is undergoing some rebuilding, and the automatic updates are currently out of action. Data for the period 01/01/2020 - 30/06/2022 can still be accessed and downloaded, but new data will not be relseased until maintenance has been performed.**
-
 # Downloads
 
 Here we provide links to download the spatially averaged data either as .RDS files for use in R or as zipped tab-delimited txt files for other applications. 
