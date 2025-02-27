@@ -29,3 +29,8 @@ areadata-token.txt
 
 # crontab
 areadata-cron.sh
+.Rproj.user
+
+# Development environment data
+.idea
+*.RProj
