@@ -286,7 +286,7 @@ saveRDS(
     .give.names(UK_STP.precip, UK_STP$STP21NM, dates, TRUE),
     "output/precip-dailymean-UK-STP-cleaned.RDS"
 )
-cli_alert_success(col_blue("Averaged precipitation"))
+cli_alert_success(col_blue("Saved precipitation"))
 
 cli_progress_done()
 
