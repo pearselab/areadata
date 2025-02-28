@@ -69,7 +69,7 @@ Fick, S.E. and R.J. Hijmans, 2017. WorldClim 2: new 1km spatial resolution clima
    * -y: the **Y**ears you want the data for, e.g. -y 2021 or -y '2020 2021' (must be set)
    * -m: the **M**onth(s) you want the data for, e.g. -m 01 or -m '01 02 03' (must be set)
    * -c: the number of **C**ores you want R to use for the parallelised averaging across regions code, e.g. -c 4 (defaults to 1 if not set)
-   * -v the climate **V**ariables you want to update, currently accepts arguments: *temperature, humidity, precipitation, uv*, e.g. -v temperature or -v 'temperature precipitation'
+   * -v the climate **V**ariables you want to update, currently accepts arguments: *temperature, spec_humid, rel_humid, precipitation, uv*, e.g. -v temperature or -v 'temperature precipitation'
    * It's suggested not to do too many dates at once, as this will result in a large download that will take a long time and use up a lot of hard drive space.
 
 2. Save space by deleting the large .grib files in the data folder after cleaning
