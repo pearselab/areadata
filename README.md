@@ -52,7 +52,7 @@ Fick, S.E. and R.J. Hijmans, 2017. WorldClim 2: new 1km spatial resolution clima
    2. Install the egg `cdsapi` (use something like `sudo pip install cdsapi`).
 2. **R**.
    1. Ensure you have R (>= 3.6.3) installed on your computer, and that it runs when you type `Rscript` into your terminal.
-   2. Install required R packages: "optparse", "raster", "sf", "tidyr", "rgdal" with install.packages()
+   2. Install required R packages: "optparse", "raster", "sf", "tidyverse", "rgdal" with `install.packages()`
 3. **CDS AR5 climate data** - follow these instructions if you want to download these data
    1. Register for an API key at https://cds.climate.copernicus.eu/#!/home
    2. Follow instructions here to create a .cdsapirc file in $HOME with your api key information: https://cds.climate.copernicus.eu/api-how-to
