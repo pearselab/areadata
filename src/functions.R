@@ -7,7 +7,7 @@
 
 .avg.climate <- function(shapefile, x){
   # average the climate variable across each object in the shapefile
-  return(exact_extract(x = x, y = shapefile, "mean"))
+  return(exact_extract(x = x, y = shapefile, "mean", progress=FALSE))
 }
 
 .avg.wrapper <- function(climate, region){

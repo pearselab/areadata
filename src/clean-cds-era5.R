@@ -13,7 +13,7 @@ if (is_interactive()){
   # FW: Only really needed for debug analysis, but worth having a place for it
   # just in case we want to add more interactive stuff anon (e.g. an interactive CLI selection thing)
   cli_alert_info(col_green("Running interactively!"))
-  opt <- list(years = "2020", months = "01", days = "all", cores = 4L, help = FALSE)
+  opt <- list(years = "2020", months = "01", days = "all", cores = 4L, help = FALSE, folder = FALSE)
 } else {
   cli_alert_info(col_green("Running in batch mode!"))
   # command line arguments options
@@ -25,7 +25,9 @@ if (is_interactive()){
     make_option(c("-d", "--days"), type="character", default="all",
                 help="comma separated list of days", metavar="character"),
     make_option(c("-c", "--cores"), type="integer", default=1,
-                help="number of cores to use for parallelised code", metavar="number")
+                help="number of cores to use for parallelised code", metavar="number"),
+    make_option(c("-f", "--folder"), action="store_true", default=FALSE,
+                help="whether to read from and store into a subfolder based upon the arguments provided", metavar="logical")
   );
 
   opt_parser = OptionParser(option_list=option_list);
@@ -38,7 +40,8 @@ cli_inform(c(
   ">" = "Years: {.val {opt$years}}",
   ">" = "Months: {.val {opt$months}}",
   ">" = "Days: {.val {opt$days}}",
-  ">" = "Cores: {.val {opt$cores}}"))
+  ">" = "Cores: {.val {opt$cores}}",
+  ">" = "Subfolder: {.val {opt$folder}}"))
 
 # set number of cores
 options(mc.cores = opt$cores)
@@ -48,22 +51,31 @@ years <- as.numeric(strsplit(opt$years, ",")[[1]])
 months <- as.numeric(strsplit(opt$months, ",")[[1]])
 
 if(opt$days == "all"){
-    days <- seq(1, 31, 1)
+  days <- seq(1, 31, 1)
 } else{
-    days <- as.numeric(strsplit(opt$days, ",")[[1]])
+  days <- as.numeric(strsplit(opt$days, ",")[[1]])
 }
 
 all_dates <- expand_grid(years, months, days)
 all_dates$date <- as.Date(paste(all_dates$years, all_dates$months, all_dates$days, sep = "/"), "%Y/%m/%d")
 
-# Get countries and states
-# print("loading shapefiles...")
-# countries <- shapefile("data/gis/gadm-countries.shp")
-# states <- shapefile("data/gis/gadm-states.shp")
-# counties <- shapefile("data/gis/gadm-counties.shp")
-# UK_NUTS <- shapefile("data/gis/NUTS_Level_1_(January_2018)_Boundaries.shp")
-# UK_LTLA <- shapefile("data/gis/Local_Authority_Districts_(December_2019)_Boundaries_UK_BFC.shp")
-# UK_STP <- shapefile("data/gis/Sustainability_and_Transformation_Partnerships_(April_2021)_EN_BFC.shp")
+datafolder <- "data/"
+outputfolder <- "output/"
+subfolder <- ""
+
+if (opt$folder) {
+  # Some slightly arcane method for forcing 2-digit months
+  subfolder <- paste0(paste0(years, collapse = "-"), "_", paste0(sprintf("%02d", as.integer(months)), collapse = "-"), "/")
+  cli_alert_info("Working from/to subfolder {.path {subfolder}}")
+}
+datafolder <- paste0(datafolder, subfolder)
+outputfolder <- paste0(outputfolder, subfolder)
+# Check if output folder exists, and make it if needed
+if (!dir.exists(outputfolder)){
+  cli_alert_info("Creating output folder at {.path {outputfolder}}")
+  dir.create(outputfolder, showWarnings = FALSE)
+}
+# quit()
 
 # FW: Remake with no rgdal
 # Get countries and states
@@ -77,216 +89,75 @@ UK_LTLA <- sf::read_sf("data/gis/Local_Authority_Districts_(December_2019)_Bound
 UK_STP <- sf::read_sf("data/gis/Sustainability_and_Transformation_Partnerships_(April_2021)_EN_BFC.shp")
 cli_alert_success("Loaded shapefiles")
 
-cli_progress_message("Loading climate data...")
-# Load climate data and subset into rasters for each day of the year
+# Get dates for later naming
 dates <- as.character(all_dates[!is.na(all_dates$date),]$date)
-temp <- terra::as.list(terra::rast("data/cds-temp-dailymean.grib"))
-spechumid <- terra::as.list(terra::rast("data/cds-spechumid-dailymean.grib"))
-relhumid <- terra::as.list(terra::rast("data/cds-relhumid-dailymean.grib"))
-uv <- terra::as.list(terra::rast("data/cds-uv-dailymean.grib"))
-precip <- terra::as.list(terra::rast("data/cds-precip-dailymean.grib"))
-cli_alert_success("Loaded climate data")
 
-# get the UK spatial data into the correct projection
-UK_NUTS_reproj <- st_transform(UK_NUTS, crs(temp[[1]]))
-UK_LTLA_reproj <- st_transform(UK_LTLA, crs(temp[[1]]))
-UK_STP_reproj <- st_transform(UK_STP, crs(temp[[1]]))
+# set up to detect if reprojection has been done yet
 
-################
-# run the code #
-################
+UK_NUTS_reproj <- NULL
+UK_LTLA_reproj <- NULL
+UK_STP_reproj <- NULL
+
+# Package up location data into list for easy transferal
+# locdata <- list(countries=countries, states=states, counties=counties, UK_NUTS=UK_NUTS_reproj, UK_LTLA=UK_LTLA_reproj, UK_STP=UK_STP_reproj)
+
+measures <- c("temp", "spechumid", "relhumid", "uv", "precip")
 
 cli_h1("Average Across Regions")
-cli_progress_message("Averaging temperature...")
-c.temp <- .avg.wrapper(temp, countries)
-s.temp <- .avg.wrapper(temp, states)
-ct.temp <- .avg.wrapper(temp, counties)
-UK_NUTS.temp <- .avg.wrapper(temp, UK_NUTS_reproj)
-UK_LTLA.temp <- .avg.wrapper(temp, UK_LTLA_reproj)
-UK_STP.temp <- .avg.wrapper(temp, UK_STP_reproj)
-cli_alert_success(col_red("Averaged temperature"))
+for (measure in measures) {
+  tryCatch(
+    error = function(cnd) {
+      cli_warn(c("!"="Failed run on {.val {measure}}! Skipping...", "!"="{cnd}"))
+    }, {
+      cli_progress_message("Loading {measure}...")
+      climvar <- terra::as.list(terra::rast(paste0(datafolder, "cds-", measure,"-dailymean.grib")))
+      cli_alert_success(col_red("Loaded {measure}"))
 
-cli_progress_message("Averaging specific humidity...")
-c.spechumid <- .avg.wrapper(spechumid, countries)
-s.spechumid <- .avg.wrapper(spechumid, states)
-ct.spechumid <- .avg.wrapper(spechumid, counties)
-UK_NUTS.spechumid <- .avg.wrapper(spechumid, UK_NUTS_reproj)
-UK_LTLA.spechumid <- .avg.wrapper(spechumid, UK_LTLA_reproj)
-UK_STP.spechumid <- .avg.wrapper(spechumid, UK_STP_reproj)
-cli_alert_success(col_cyan("Averaged specific humidity"))
+      if (any(is.null(c(UK_NUTS_reproj, UK_LTLA_reproj, UK_STP_reproj)))) {
+        # get the UK spatial data into the correct projection
+        UK_NUTS_reproj <- st_transform(UK_NUTS, crs(climvar[[1]]))
+        UK_LTLA_reproj <- st_transform(UK_LTLA, crs(climvar[[1]]))
+        UK_STP_reproj <- st_transform(UK_STP, crs(climvar[[1]]))
+      }
 
-cli_progress_message("Averaging relative humidity...")
-c.relhumid <- .avg.wrapper(relhumid, countries)
-s.relhumid <- .avg.wrapper(relhumid, states)
-ct.relhumid <- .avg.wrapper(relhumid, counties)
-UK_NUTS.relhumid <- .avg.wrapper(relhumid, UK_NUTS_reproj)
-UK_LTLA.relhumid <- .avg.wrapper(relhumid, UK_LTLA_reproj)
-UK_STP.relhumid <- .avg.wrapper(relhumid, UK_STP_reproj)
-cli_alert_success(col_cyan("Averaged relative humidity"))
+      cli_progress_message("Averaging {measure}...")
+      c.climvar <- .avg.wrapper(climvar, countries)
+      s.climvar <- .avg.wrapper(climvar, states)
+      ct.climvar <- .avg.wrapper(climvar, counties)
+      UK_NUTS.climvar <- .avg.wrapper(climvar, UK_NUTS_reproj)
+      UK_LTLA.climvar <- .avg.wrapper(climvar, UK_LTLA_reproj)
+      UK_STP.climvar <- .avg.wrapper(climvar, UK_STP_reproj)
+      cli_alert_success(col_yellow("Averaged {measure}"))
 
-cli_progress_message("Averaging UV...")
-c.uv <- .avg.wrapper(uv, countries)
-s.uv <- .avg.wrapper(uv, states)
-ct.uv <- .avg.wrapper(uv, counties)
-UK_NUTS.uv <- .avg.wrapper(uv, UK_NUTS_reproj)
-UK_LTLA.uv <- .avg.wrapper(uv, UK_LTLA_reproj)
-UK_STP.uv <- .avg.wrapper(uv, UK_STP_reproj)
-cli_alert_success(col_magenta("Averaged UV"))
-
-
-cli_progress_message("Averaging precipitation...")
-c.precip <- .avg.wrapper(precip, countries)
-s.precip <- .avg.wrapper(precip, states)
-ct.precip <- .avg.wrapper(precip, counties)
-UK_NUTS.precip <- .avg.wrapper(precip, UK_NUTS_reproj)
-UK_LTLA.precip <- .avg.wrapper(precip, UK_LTLA_reproj)
-UK_STP.precip <- .avg.wrapper(precip, UK_STP_reproj)
-cli_alert_success(col_blue("Averaged precipitation"))
-
-
-# format and save
-# print("saving output files...")
-cli_h1("Save output files")
-cli_progress_message("Saving output files...")
-# Temperature
-cli_progress_message("Saving temperature...")
-saveRDS(
-    .give.names(c.temp, countries$NAME_0, dates, TRUE),
-    "output/temp-dailymean-countries-cleaned.RDS"
-)
-saveRDS(
-    .give.names(s.temp, states$GID_1, dates),
-    "output/temp-dailymean-GID1-cleaned.RDS"
-)
-saveRDS(
-    .give.names(ct.temp, counties$GID_2, dates),
-    "output/temp-dailymean-GID2-cleaned.RDS"
-)
-saveRDS(
-    .give.names(UK_NUTS.temp, UK_NUTS$nuts118nm, dates, TRUE),
-    "output/temp-dailymean-UK-NUTS-cleaned.RDS"
-)
-saveRDS(
-    .give.names(UK_LTLA.temp, UK_LTLA$lad19nm, dates, TRUE),
-    "output/temp-dailymean-UK-LTLA-cleaned.RDS"
-)
-saveRDS(
-    .give.names(UK_STP.temp, UK_STP$STP21NM, dates, TRUE),
-    "output/temp-dailymean-UK-STP-cleaned.RDS"
-)
-cli_alert_success(col_red("Saved temperature"))
-
-# Specific Humidity
-cli_progress_message("Saving specific humidity...")
-saveRDS(
-    .give.names(c.spechumid, countries$NAME_0, dates, TRUE),
-    "output/spechumid-dailymean-countries-cleaned.RDS"
-)
-saveRDS(
-    .give.names(s.spechumid, states$GID_1, dates),
-    "output/spechumid-dailymean-GID1-cleaned.RDS"
-)
-saveRDS(
-    .give.names(ct.spechumid, counties$GID_2, dates),
-    "output/spechumid-dailymean-GID2-cleaned.RDS"
-)
-saveRDS(
-    .give.names(UK_NUTS.spechumid, UK_NUTS$nuts118nm, dates, TRUE),
-    "output/spechumid-dailymean-UK-NUTS-cleaned.RDS"
-)
-saveRDS(
-    .give.names(UK_LTLA.spechumid, UK_LTLA$lad19nm, dates, TRUE),
-    "output/spechumid-dailymean-UK-LTLA-cleaned.RDS"
-)
-saveRDS(
-    .give.names(UK_STP.spechumid, UK_STP$STP21NM, dates, TRUE),
-    "output/spechumid-dailymean-UK-STP-cleaned.RDS"
-)
-cli_alert_success(col_cyan("Saved specific humidity"))
-
-# Relative humidity
-cli_progress_message("Saving relative humidity...")
-saveRDS(
-    .give.names(c.relhumid, countries$NAME_0, dates, TRUE),
-    "output/relhumid-dailymean-countries-cleaned.RDS"
-)
-saveRDS(
-    .give.names(s.relhumid, states$GID_1, dates),
-    "output/relhumid-dailymean-GID1-cleaned.RDS"
-)
-saveRDS(
-    .give.names(ct.relhumid, counties$GID_2, dates),
-    "output/relhumid-dailymean-GID2-cleaned.RDS"
-)
-saveRDS(
-    .give.names(UK_NUTS.relhumid, UK_NUTS$nuts118nm, dates, TRUE),
-    "output/relhumid-dailymean-UK-NUTS-cleaned.RDS"
-)
-saveRDS(
-    .give.names(UK_LTLA.relhumid, UK_LTLA$lad19nm, dates, TRUE),
-    "output/relhumid-dailymean-UK-LTLA-cleaned.RDS"
-)
-saveRDS(
-    .give.names(UK_STP.relhumid, UK_STP$STP21NM, dates, TRUE),
-    "output/relhumid-dailymean-UK-STP-cleaned.RDS"
-)
-cli_alert_success(col_cyan("Saved relative humidity"))
-
-# UV
-cli_progress_message("Saving UV...")
-saveRDS(
-    .give.names(c.uv, countries$NAME_0, dates, TRUE),
-    "output/uv-dailymean-countries-cleaned.RDS"
-)
-saveRDS(
-    .give.names(s.uv, states$GID_1, dates),
-    "output/uv-dailymean-GID1-cleaned.RDS"
-)
-saveRDS(
-    .give.names(ct.uv, counties$GID_2, dates),
-    "output/uv-dailymean-GID2-cleaned.RDS"
-)
-saveRDS(
-    .give.names(UK_NUTS.uv, UK_NUTS$nuts118nm, dates, TRUE),
-    "output/uv-dailymean-UK-NUTS-cleaned.RDS"
-)
-saveRDS(
-    .give.names(UK_LTLA.uv, UK_LTLA$lad19nm, dates, TRUE),
-    "output/uv-dailymean-UK-LTLA-cleaned.RDS"
-)
-saveRDS(
-    .give.names(UK_STP.uv, UK_STP$STP21NM, dates, TRUE),
-    "output/uv-dailymean-UK-STP-cleaned.RDS"
-)
-cli_alert_success(col_magenta("Saved UV"))
-
-# Precipitation
-cli_progress_message("Saving precipitation...")
-saveRDS(
-    .give.names(c.precip, countries$NAME_0, dates, TRUE),
-    "output/precip-dailymean-countries-cleaned.RDS"
-)
-saveRDS(
-    .give.names(s.precip, states$GID_1, dates),
-    "output/precip-dailymean-GID1-cleaned.RDS"
-)
-saveRDS(
-    .give.names(ct.precip, counties$GID_2, dates),
-    "output/precip-dailymean-GID2-cleaned.RDS"
-)
-saveRDS(
-    .give.names(UK_NUTS.precip, UK_NUTS$nuts118nm, dates, TRUE),
-    "output/precip-dailymean-UK-NUTS-cleaned.RDS"
-)
-saveRDS(
-    .give.names(UK_LTLA.precip, UK_LTLA$lad19nm, dates, TRUE),
-    "output/precip-dailymean-UK-LTLA-cleaned.RDS"
-)
-saveRDS(
-    .give.names(UK_STP.precip, UK_STP$STP21NM, dates, TRUE),
-    "output/precip-dailymean-UK-STP-cleaned.RDS"
-)
-cli_alert_success(col_blue("Saved precipitation"))
+      cli_progress_message("Saving {measure}...")
+      saveRDS(
+        .give.names(c.climvar, countries$NAME_0, dates, TRUE),
+        paste0(outputfolder, measure, "-dailymean-countries-cleaned.RDS")
+      )
+      saveRDS(
+        .give.names(s.climvar, states$GID_1, dates),
+        paste0(outputfolder, measure, "-dailymean-GID1-cleaned.RDS")
+      )
+      saveRDS(
+        .give.names(ct.climvar, counties$GID_2, dates),
+        paste0(outputfolder, measure, "-dailymean-GID2-cleaned.RDS")
+      )
+      saveRDS(
+        .give.names(UK_NUTS.climvar, UK_NUTS$nuts118nm, dates, TRUE),
+        paste0(outputfolder, measure, "-dailymean-UK-NUTS-cleaned.RDS")
+      )
+      saveRDS(
+        .give.names(UK_LTLA.climvar, UK_LTLA$lad19nm, dates, TRUE),
+        paste0(outputfolder, measure, "-dailymean-UK-LTLA-cleaned.RDS")
+      )
+      saveRDS(
+        .give.names(UK_STP.climvar, UK_STP$STP21NM, dates, TRUE),
+        paste0(outputfolder, measure, "-dailymean-UK-STP-cleaned.RDS")
+      )
+      cli_alert_success(col_green("Saved {measure}"))
+    }
+  )
+}
 
 cli_progress_done()
 
