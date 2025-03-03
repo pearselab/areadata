@@ -29,7 +29,7 @@ if (is_interactive()){
     make_option(c("-p", "--path"), type="character", default="output/",
                 help="the path of the output dump folders"),
     make_option(c("-d", "--allowdiscontinuous"), action="store_true", default=FALSE,
-                help="allow dump creation if discontinuous dates are detected", metavar="logical")
+                help="allow dump creation even if discontinuous dates are detected", metavar="logical")
   );
 
   opt_parser = OptionParser(option_list=option_list);
