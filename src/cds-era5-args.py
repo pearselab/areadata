@@ -52,6 +52,16 @@ if args.folder:
 # Force line break for nice formatting
 print()
 
+# Allow for alternative names
+alt_names = {
+    "temp": "temperature",
+    "spechumid": "spec_humid",
+    "relhumid": "rem_humid",
+    "precip": "precipitation",
+}
+
+climvars = [alt_names.get(x, x) for x in args.climvars]
+
 # Data store for supported rasters. When you add new ones from era5 you may just need to add a line here
 rasterlookup = {
     "temperature": {"name": "reanalysis-era5-pressure-levels", "variable": "temperature", "filename": "cds-temp.grib"},
@@ -69,7 +79,7 @@ if not (args.years and args.months and dldays):
     sys.exit(1)
 
 # Run download code depending on which climate variable is selected
-for climvar in args.climvars:
+for climvar in climvars:
     # Try to get the data for the provided climatic variable
     try:
         climvardata = rasterlookup[climvar]
