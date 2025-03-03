@@ -1,7 +1,7 @@
 import cdsapi
 import argparse
 import sys
-
+from pathlib import Path
 from multiurl import download
 
 text = 'Download cds data with command date selections.'
@@ -45,7 +45,9 @@ outfolder = "data"
 # Construct output folder if required
 if args.folder:
     outfolder = "data/{}_{}".format("-".join(args.years), "-".join(args.months))
-    print("Output folder data/{}".format(outfolder))
+    print("Output folder {}".format(outfolder))
+    # Make sure folder exists, and create if not
+    Path(outfolder).mkdir(parents=True, exist_ok=True)
 
 # Force line break for nice formatting
 print()
