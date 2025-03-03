@@ -74,7 +74,7 @@ for (i in 1:length(final_intervals)){
   folderdf$intervalend[matching_intervals] <- year(enddates[i])
 }
 
-dump_intervals <- dplyr::distinct(folderdf[,c("intervalstart", "intervalend")])
+dump_intervals <- na.omit(dplyr::distinct(folderdf[,c("intervalstart", "intervalend")]))
 cli_alert_success("Found {nrow(dump_intervals)} dump interval{?s} to process")
 
 dump_concatenator <- function(startyear, endyear, dumps, metric, agglevel, outpath, allowdiscon = FALSE) {
@@ -93,9 +93,8 @@ dump_concatenator <- function(startyear, endyear, dumps, metric, agglevel, outpa
   # If names are discontinuous, we may have a problem in dump integrity
   namevec <- as.Date(colnames(outdf))
   if (!(all(as.integer(namevec[2:length(namevec)] - namevec[1:length(namevec)-1]) == 1))) {
-    if (allowdiscon) {
-      cli_alert_warning(col_yellow("{outname} has discontinuous dates!"))
-    } else {
+    cli_alert_warning(col_yellow("{outname} has discontinuous dates!"))
+    if (!allowdiscon) {
       cli_abort("x" = col_red("{outname} has discontinuous dates!"))
     }
   }
