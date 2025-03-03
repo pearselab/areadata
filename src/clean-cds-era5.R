@@ -13,7 +13,7 @@ if (is_interactive()){
   # FW: Only really needed for debug analysis, but worth having a place for it
   # just in case we want to add more interactive stuff anon (e.g. an interactive CLI selection thing)
   cli_alert_info(col_green("Running interactively!"))
-  opt <- list(years = "2020", months = "01", days = "all", cores = 4L, help = FALSE, folder = FALSE)
+  opt <- list(years = "2020", months = "01", days = "all", climvars=NULL, cores = 4L, help = FALSE, folder = FALSE)
 } else {
   cli_alert_info(col_green("Running in batch mode!"))
   # command line arguments options
@@ -24,6 +24,8 @@ if (is_interactive()){
                 help="comma separated list of months", metavar="character"),
     make_option(c("-d", "--days"), type="character", default="all",
                 help="comma separated list of days", metavar="character"),
+    make_option(c("-v", "--climvars"), type="character", default=NULL,
+                help="comma separated list of desired climvars (defaults to all)", metavar="character"),
     make_option(c("-c", "--cores"), type="integer", default=1,
                 help="number of cores to use for parallelised code", metavar="number"),
     make_option(c("-f", "--folder"), action="store_true", default=FALSE,
@@ -34,12 +36,22 @@ if (is_interactive()){
   opt = parse_args(opt_parser)
 }
 
+measures <- c("temp", "spechumid", "relhumid", "uv", "precip")
+
+if (!is.null(opt$climvars)) {
+  measures_tmp <- gsub(" ", "", strsplit(opt$climvars, ",")[[1]])
+
+  # Only try allowed measures
+  measures <- intersect(measures, measures_tmp)
+}
+
 # Let user know what parameters are being used.
 cli_h2("Parameters")
 cli_inform(c(
   ">" = "Years: {.val {opt$years}}",
   ">" = "Months: {.val {opt$months}}",
   ">" = "Days: {.val {opt$days}}",
+  ">" = "Climvars: {.val {measures}}",
   ">" = "Cores: {.val {opt$cores}}",
   ">" = "Subfolder: {.val {opt$folder}}"))
 
@@ -101,9 +113,8 @@ UK_STP_reproj <- NULL
 # Package up location data into list for easy transferal
 # locdata <- list(countries=countries, states=states, counties=counties, UK_NUTS=UK_NUTS_reproj, UK_LTLA=UK_LTLA_reproj, UK_STP=UK_STP_reproj)
 
-measures <- c("temp", "spechumid", "relhumid", "uv", "precip")
-
 cli_h1("Average Across Regions")
+# Measures is located at the top of the script
 for (measure in measures) {
   tryCatch(
     error = function(cnd) {
