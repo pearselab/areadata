@@ -15,7 +15,7 @@ cli_alert_success("Loaded packages and functions")
 
 if (is_interactive()){
   cli_alert_info(col_green("Running interactively!"))
-  opt <- list(start = 1940L, end = 2024L, length = 10, path = "output/", help = FALSE, allowdiscontinuous = TRUE)
+  opt <- list(start = 1940L, end = 2019L, length = 10, path = "output/", help = FALSE, allowdiscontinuous = TRUE)
 } else {
   cli_alert_info(col_green("Running in batch mode!"))
   # command line arguments

@@ -4,10 +4,14 @@
 #SBATCH --cpus-per-task=8 # Number of CPU cores per task
 #SBATCH --mem=12G # Memory per node
 #SBATCH --partition=large_336 # Must keep this requirement on anything running on Harvey
+#SBATCH --output=logs/slurm-%j.out
 
 # Run script to download and then average climate variable across spatial units
 # Run on SLURM (e.g. for 10 years of data) using `sbatch --array=0-119 -J AREAData_Download`
 # Francis Windram 2025 (based on Tom Smith 2021)
+
+# Source environment activator if present
+if [ -e src/activate_env.sh ]; then source src/activate_env.sh; fi
 
 start=`date +%s`
 
@@ -33,7 +37,10 @@ if [ -z "$cores" ]; then cores=1; fi
 if [ -z "$index" ]; then index=0; fi
 if [ -z "$movefiles" ]; then movefiles=0; fi
 if [ -z "$deletefiles" ]; then deletefiles=0; fi
-if [ -v "$SLURM_ARRAY_TASK_ID" ]; then echo -e "\nSLURM ID: $SLURM_ARRAY_TASK_ID \n"; index=$SLURM_ARRAY_TASK_ID; fi
+if [ -n "$SLURM_ARRAY_TASK_ID" ]; then
+  echo -e "\nSLURM ID: $SLURM_ARRAY_TASK_ID \n"
+  index=$SLURM_ARRAY_TASK_ID
+fi
 
 # detect starting delimiter
 startdelim="-"
@@ -150,6 +157,8 @@ echo -e "\n=============== AVERAGE DATA ===============\n"
 for climvar in ${desiredclimvars[@]}; do
     [ -e "${datapath}/cds-${climvar}.grib" ] && cdo daymean "${datapath}/cds-${climvar}.grib" "${datapath}/cds-${climvar}-dailymean.grib"
 done
+
+echo "Averaged source files"
 
 # archive the downloads somewhere or delete
 if [[ $movefiles -eq 1 ]]; then
