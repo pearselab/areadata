@@ -4,7 +4,6 @@
 #SBATCH --cpus-per-task=8 # Number of CPU cores per task
 #SBATCH --mem=12G # Memory per node
 #SBATCH --partition=large_336 # Must keep this requirement on anything running on Harvey
-#SBATCH --output=logs/slurm-%j.out
 
 # Run script to download and then average climate variable across spatial units
 # Run on SLURM (e.g. for 10 years of data) using `sbatch --array=0-119 -J AREAData_Download`

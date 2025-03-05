@@ -56,7 +56,7 @@ print()
 alt_names = {
     "temp": "temperature",
     "spechumid": "spec_humid",
-    "relhumid": "rem_humid",
+    "relhumid": "rel_humid",
     "precip": "precipitation",
 }
 
