@@ -15,16 +15,6 @@
 # Source environment activator if present
 if [ -e src/activate_env.sh ]; then source src/activate_env.sh; fi
 
-sleepmax=600  # Max sleep amount = 600s
-
-sleeptime=$((1 + $RANDOM % $sleepmax))
-
-echo "Sleeping for $sleeptime seconds to offset downloads"
-
-sleep $sleeptime
-
-echo "Sleep over, starting run!"
-
 start=`date +%s`
 
 OPTSTRING="dmps:e:c:i:v:"
@@ -150,6 +140,17 @@ if [ -n $pickup ]; then
     exit 0
   fi
 fi
+
+# Sleep to offset downloads
+sleepmax=600  # Max sleep amount = 600s
+
+sleeptime=$((1 + $RANDOM % $sleepmax))
+
+echo "Sleeping for $sleeptime seconds to offset downloads"
+
+sleep $sleeptime
+
+echo "Sleep over, starting run!"
 
 echo -e "\n=============== DOWNLOAD DATA ===============\n"
 
