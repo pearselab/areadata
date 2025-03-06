@@ -1,9 +1,12 @@
 #!/bin/bash
-#SBATCH --time=0-02:00:00
+#SBATCH --time=0-24:00:00
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8 # Number of CPU cores per task
 #SBATCH --mem=12G # Memory per node
 #SBATCH --partition=large_336 # Must keep this requirement on anything running on Harvey
+
+# Run command: sbatch --array=0-119%4 src/get-historic-data.sh -s 2010-1 -e 2019-12 -c 8 -d
+# alt command - 4 year run: sbatch --array=0-47%4 src/get-historic-data.sh -s 2010-1 -e 2013-12 -c 8 -d
 
 # Run script to download and then average climate variable across spatial units
 # Run on SLURM (e.g. for 10 years of data) using `sbatch --array=0-119 -J AREAData_Download`
@@ -12,14 +15,25 @@
 # Source environment activator if present
 if [ -e src/activate_env.sh ]; then source src/activate_env.sh; fi
 
+sleepmax=600  # Max sleep amount = 600s
+
+sleeptime=$((1 + $RANDOM % $sleepmax))
+
+echo "Sleeping for $sleeptime seconds to offset downloads"
+
+sleep $sleeptime
+
+echo "Sleep over, starting run!"
+
 start=`date +%s`
 
-OPTSTRING="dms:e:c:i:v:"
+OPTSTRING="dmps:e:c:i:v:"
 
 while getopts ${OPTSTRING} flag; do
   case "${flag}" in
       d) deletefiles=1;;
       m) movefiles=1;;
+      p) pickup=1;;
       s) startdate=${OPTARG};;
       e) enddate=${OPTARG};;
       v) desiredclimvars=${OPTARG};;
@@ -34,6 +48,7 @@ if [ -z "$enddate" ]; then echo "Please prove a start and end date in yyyy-mm fo
 if [ -z "$desiredclimvars" ]; then desiredclimvars="temp,spechumid,relhumid,uv,precip"; fi
 if [ -z "$cores" ]; then cores=1; fi
 if [ -z "$index" ]; then index=0; fi
+if [ -z "$pickup" ]; then pickup=0; fi
 if [ -z "$movefiles" ]; then movefiles=0; fi
 if [ -z "$deletefiles" ]; then deletefiles=0; fi
 if [ -n "$SLURM_ARRAY_TASK_ID" ]; then
@@ -79,6 +94,7 @@ echo "End year: ${endyear}"
 echo "End month: ${endmonth}"
 echo "Cores: ${cores}"
 echo "Index: ${index}"
+echo "Pickup mode: ${pickup}"
 echo "Delete files: ${deletefiles}"
 echo "Move source files: ${movefiles}"
 
@@ -125,6 +141,15 @@ echo -e "\nRunning download for ${finalyear}-${finalmonth}"
 # Make datapath
 
 datapath="data/${finalyear}_${finalmonth}"
+
+# Check if a run has already been performed (if in pickup mode) and exit if so
+# Folder should only exist if run successfully finished
+if [ -n $pickup ]; then
+  if [ -d "output/${finalyear}_${finalmonth}" ]; then
+    echo "Already processed ${finalyear}_${finalmonth}! Exiting"
+    exit 0
+  fi
+fi
 
 echo -e "\n=============== DOWNLOAD DATA ===============\n"
 

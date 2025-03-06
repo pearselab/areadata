@@ -44,7 +44,18 @@ outfolder = "data"
 
 # Construct output folder if required
 if args.folder:
-    outfolder = "data/{}_{}".format("-".join(args.years), "-".join(args.months))
+    if len(args.months) == 1:
+        monthout = "_{}".format(args.months[0])
+    elif len(args.months) == 12:
+        monthout = ""
+    else:
+        monthout = "_{}-{}".format(args.months[0], args.months[-1])
+
+    if len(args.years) == 1:
+        yearout = "{}".format(args.years[0])
+    else:
+        yearout = "{}-{}".format(args.years[0], args.years[-1])
+    outfolder = "data/{}{}".format(yearout, monthout)
     print("Output folder {}".format(outfolder))
     # Make sure folder exists, and create if not
     Path(outfolder).mkdir(parents=True, exist_ok=True)
