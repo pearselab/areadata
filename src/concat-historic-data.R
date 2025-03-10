@@ -8,7 +8,7 @@ library(cli)
 library(optparse)
 library(lubridate)
 
-cli_h1("ERA5 Data Cleaner")
+cli_h1("ERA5 Data Concatenator")
 starttime <- lubridate::now()
 
 cli_alert_success("Loaded packages and functions")
@@ -81,7 +81,7 @@ dump_concatenator <- function(startyear, endyear, dumps, metric, agglevel, outpa
   outname <- paste0(metric, "-dailymean-", agglevel, "-cleaned-", startyear,"-", endyear, ".RDS")
 
   # Read all dumps into a list and bind together
-  outlist <- apply(as.array(dump_subset$folder), 1, function(x) {readRDS(file.path(outpath, x, paste0(metric, "-dailymean-", agglevel, "-cleaned.RDS")))})
+  outlist <- apply(as.array(dumps$folder), 1, function(x) {readRDS(file.path(outpath, x, paste0(metric, "-dailymean-", agglevel, "-cleaned.RDS")))})
   outdf <- dplyr::bind_cols(outlist)
 
   # Convert back to matrix and re-add rownames

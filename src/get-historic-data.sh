@@ -5,8 +5,8 @@
 #SBATCH --mem=12G # Memory per node
 #SBATCH --partition=large_336 # Must keep this requirement on anything running on Harvey
 
-# Run command: sbatch --array=0-119%4 src/get-historic-data.sh -s 2010-1 -e 2019-12 -c 8 -d
-# alt command - 4 year run: sbatch --array=0-47%4 src/get-historic-data.sh -s 2010-1 -e 2013-12 -c 8 -d
+# Run command: sbatch --array=0-119%4 src/get-historic-data.sh -s 2010-1 -e 2019-12 -c 8 -d -p
+# alt command - 4 year run: sbatch --array=0-47%4 src/get-historic-data.sh -s 2010-1 -e 2013-12 -c 8 -d -p
 
 # Run script to download and then average climate variable across spatial units
 # Run on SLURM (e.g. for 10 years of data) using `sbatch --array=0-119 -J AREAData_Download`
