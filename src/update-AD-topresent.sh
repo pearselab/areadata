@@ -4,6 +4,8 @@
 # Run a LIVE update up to the present time and concatenate with the previous LIVE dump
 # Command example: bash src/update-AD-topresent.sh
 
+# TODO add date limit and equivalent flag so users can specify only updating towards a certain point.
+
 # Find date of current AD dump/s
 dumpdates=$(Rscript src/find-dump-dates.R)
 dumpdates=(${dumpdates//,/ })

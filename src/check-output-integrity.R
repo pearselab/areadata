@@ -15,9 +15,9 @@ agglevels <- c("countries", "GID1", "GID2", "UK-NUTS", "UK-LTLA", "UK-STP")
 dumptypes <- expand.grid(agglevel=agglevels, measure=measures)
 expected_files <- paste0(dumptypes$measure, "-dailymean-", dumptypes$agglevel, "-cleaned.RDS")
 
-# cli_bullets(setNames(expected_files, rep_len(">", length(expected_files))))
-
 num_expected <- length(expected_files)
+
+outputdf <- data.frame(folder=datefolders, missing=0, extra=0)
 
 for (folder in datefolders) {
   cli_h3("Evaluating {folder}")
@@ -28,16 +28,31 @@ for (folder in datefolders) {
   if (length(missingfiles) > 0) {
     cli_alert_danger(col_red("Missing {length(missingfiles)} file{?s}!"))
     cli_bullets(setNames(missingfiles, rep_len(">", length(missingfiles))))
+    outputdf$missing[which(outputdf$folder == folder)] <- length(missingfiles)
     successful <- FALSE
   }
 
   if (length(extrafiles) > 0) {
     cli_alert_warning(col_yellow("Extra {length(extrafiles)} file{?s}!"))
     cli_bullets(setNames(extrafiles, rep_len(">", length(extrafiles))))
+    outputdf$extra[which(outputdf$folder == folder)] <- length(extrafiles)
     successful <- FALSE
   }
 
   if (successful) {
     cli_alert_success(col_green("All files present, no extras."))
   }
+}
+
+cli_h1("Summary report")
+reportdf <- subset(outputdf, (outputdf$missing+outputdf$extra) > 0)
+if (nrow(reportdf > 0)) {
+  if (sum(reportdf$missing) > 0) {
+    cli_alert_danger(col_red("Crucial files missing!"))
+  } else {
+    cli_alert_warning(col_yellow("Extra files detected!"))
+  }
+  print(reportdf)
+} else {
+  cli_alert_success(col_green("All folders correct!"))
 }
