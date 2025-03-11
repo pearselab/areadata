@@ -45,10 +45,16 @@ for climvar in ${climvars[@]}; do
             cp "${climvar}-dailymean-${agglevel}-cleaned.RDS" output/archive/$backupfolder  # TODO: temporarily disabled
             archivedcount=$((archivedcount + 1))
         fi
+        if [ -e "output/${climvar}-dailymean-${agglevel}-cleaned.txt" ]; then
+            # echo "${climvar}-dailymean-${agglevel}-cleaned.txt" output/archive/$backupfolder
+            cp "${climvar}-dailymean-${agglevel}-cleaned.txt" output/archive/$backupfolder  # TODO: temporarily disabled
+            archivedcount=$((archivedcount + 1))
+        fi
+
     done
 done
 
-echo Archived $archivedcount files.
+echo Archived $archivedcount dumps.
 
 # Merge dumps up to current date
 # echo "Rscript src/concat-LIVE-data.R -s ${firstdate} -p output/ -d"

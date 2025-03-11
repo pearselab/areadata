@@ -86,6 +86,8 @@ dump_concatenator <- function(dumps, metric, agglevel, outpath, allowdiscon = FA
 
   # Could do compression here if we want to
   saveRDS(outdf, file=file.path(outpath, outname))
+  # Also export as tsv
+  write.table(outputdf, paste0(strsplit(outname, ".R")[[1]][1], ".txt"))
   # Return name just in case it's needed
   outname
 }
