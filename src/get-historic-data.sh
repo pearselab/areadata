@@ -91,9 +91,9 @@ echo "Move source files: ${movefiles}"
 # Parse the dates to figure out what year and month should be provided
 
 workingyear=$startyear
-workingmonth=$startmonth
+workingmonth=$((10#$startmonth))  # Forces number into decimal even if prefixed with 0 (which apparently implies octal)
 finalyear=$workingyear
-finalmonth=$workingmonth
+finalmonth=$((10#$workingmonth))
 iter=$index
 
 while [[ "$iter" -gt 0 ]];do
