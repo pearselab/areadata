@@ -1,6 +1,19 @@
 #!/usr/bin/env Rscript
 
 library(cli)
+library(optparse)
+
+option_list = list(
+  make_option(c("-q", "--quiet"), action="store_true", default=FALSE,
+              help="run in quiet mode", metavar="logical")
+);
+
+opt_parser = OptionParser(option_list=option_list);
+opt = parse_args(opt_parser)
+
+if (opt$quiet) {
+  options(cli.default_handler = function(...) { })
+}
 
 cli_h1("Checking integrity of output folder structure")
 
@@ -18,6 +31,7 @@ expected_files <- paste0(dumptypes$measure, "-dailymean-", dumptypes$agglevel, "
 num_expected <- length(expected_files)
 
 outputdf <- data.frame(folder=datefolders, missing=0, extra=0)
+
 
 for (folder in datefolders) {
   cli_h3("Evaluating {folder}")
@@ -42,6 +56,10 @@ for (folder in datefolders) {
   if (successful) {
     cli_alert_success(col_green("All files present, no extras."))
   }
+}
+
+if (opt$quiet) {
+  options(cli.default_handler = NULL)
 }
 
 cli_h1("Summary report")
