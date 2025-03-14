@@ -10,7 +10,7 @@ df <- data.frame(Title=df$node$Title, Last=df$node$`Last notification`, Status=d
 df_entry <- subset(df, df$Title == "Data Stores")
 final_vec <- as.character(df_entry[1,])
 
-work_col <- col_yellow
+workcol <- col_yellow
 if (final_vec[3] == "OK") {
   workcol <- col_green
 } else if (final_vec[3] == "Down") {
