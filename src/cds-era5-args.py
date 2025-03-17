@@ -1,6 +1,7 @@
 import cdsapi
 import argparse
 import sys
+import json
 from pathlib import Path
 from multiurl import download
 
@@ -11,7 +12,7 @@ parser.add_argument("-V", "--version", help="show program version", action="stor
 parser.add_argument("-y", "--years", nargs='+', help="set download years (required), e.g. -y 2020 2021", required=True)
 parser.add_argument("-m", "--months", nargs='+', help="set download months (required), e.g. -m 01 02 03", required=True)
 parser.add_argument("-d", "--days", nargs='+', help="set download days, e.g. -d 10 11 12; if not set, will default to all days (01 - 31)")
-parser.add_argument("-c", "--climvars", nargs='+', help="set climate variable(s) to download, currently supporting: 'temperature', 'spec_humid', 'rel_humid', 'uv', 'precipitation', e.g. -c temperature rel_humid", required=True)
+parser.add_argument("-c", "--climvars", nargs='+', help="set climate variable(s) to download, currently supporting: 'temp', 'spechumid', 'relhumid', 'uv', 'precip', e.g. -c temp relhumid", required=True)
 parser.add_argument("-f", "--folder", help="output to folder named according to parameters", action="store_true")
 
 args = parser.parse_args()
@@ -65,22 +66,18 @@ print()
 
 # Allow for alternative names
 alt_names = {
-    "temp": "temperature",
-    "spechumid": "spec_humid",
-    "relhumid": "rel_humid",
-    "precip": "precipitation",
+    "temperature": "temp",
+    "spec_humid": "spechumid",
+    "rel_humid": "relhumid",
+    "precipitation": "precip",
 }
 
 climvars = [alt_names.get(x, x) for x in args.climvars]
 
 # Data store for supported rasters. When you add new ones from era5 you may just need to add a line here
-rasterlookup = {
-    "temperature": {"name": "reanalysis-era5-pressure-levels", "variable": "temperature", "filename": "cds-temp.grib"},
-    "spec_humid": {"name": "reanalysis-era5-pressure-levels", "variable": "specific_humidity", "filename": "cds-spechumid.grib"},
-    "rel_humid": {"name": "reanalysis-era5-pressure-levels", "variable": "relative_humidity", "filename": "cds-relhumid.grib"},
-    "uv": {"name": "reanalysis-era5-single-levels", "variable": "downward_uv_radiation_at_the_surface", "filename": "cds-uv.grib"},
-    "precipitation": {"name": "reanalysis-era5-single-levels", "variable": "total_precipitation", "filename": "cds-precip.grib"}
-}
+with open("src/rasterconfig.json") as j:
+    rconfig = json.load(j)
+rasterlookup = rconfig["rasterlookup"]
 
 notified = False
 
@@ -129,6 +126,6 @@ for climvar in climvars:
             ],
             'format': 'grib',
         },
-        '{}/{}'.format(outfolder, climvardata["filename"]))
+        '{}/cds-{}.grib'.format(outfolder, climvar))
 
 print("\nDownload complete!")

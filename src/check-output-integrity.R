@@ -22,8 +22,9 @@ outdir <- "output"
 output_folders <- list.dirs(outdir)
 datefolders <- grep("\\d{4}_\\d{2}", output_folders, value=TRUE)
 
-measures <- c("temp", "spechumid", "relhumid", "uv", "precip")
-agglevels <- c("countries", "GID1", "GID2", "UK-NUTS", "UK-LTLA", "UK-STP")
+rconfig <- jsonlite::fromJSON("src/rasterconfig.json")
+measures <- names(rconfig$rasterlookup)
+agglevels <- rconfig$agglevels
 
 dumptypes <- expand.grid(agglevel=agglevels, measure=measures)
 expected_files <- paste0(dumptypes$measure, "-dailymean-", dumptypes$agglevel, "-cleaned.RDS")

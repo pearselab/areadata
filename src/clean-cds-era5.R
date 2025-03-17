@@ -36,7 +36,9 @@ if (is_interactive()){
   opt = parse_args(opt_parser)
 }
 
-measures <- c("temp", "spechumid", "relhumid", "uv", "precip")
+# Load measures from the names of entries in rasterlookup
+rconfig <- jsonlite::fromJSON("src/rasterconfig.json")
+measures <- names(rconfig$rasterlookup)
 
 if (!is.null(opt$climvars)) {
   measures_tmp <- gsub(" ", "", strsplit(opt$climvars, ",")[[1]])

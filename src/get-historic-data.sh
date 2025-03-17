@@ -35,7 +35,7 @@ done
 # Set defaults and set array index if present in global env
 if [ -z "$startdate" ]; then echo "Please prove a start and end date in yyyy-mm format!"; exit 1; fi
 if [ -z "$enddate" ]; then echo "Please prove a start and end date in yyyy-mm format!"; exit 1; fi
-if [ -z "$desiredclimvars" ]; then desiredclimvars="temp,spechumid,relhumid,uv,precip"; fi
+if [ -z "$desiredclimvars" ]; then desiredclimvars=$(Rscript src/load-rasterconfig.R); fi
 if [ -z "$cores" ]; then cores=1; fi
 if [ -z "$index" ]; then index=0; fi
 if [ -z "$pickup" ]; then pickup=0; fi

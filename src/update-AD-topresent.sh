@@ -38,8 +38,11 @@ done
 
 archivedcount=0
 # Take backup of current state of dumps
-climvars=("temp" "spechumid" "relhumid" "uv" "precip")
-agglevels=("countries" "GID1" "GID2" "UK-NUTS" "UK-LTLA" "UK-STP")
+
+rconf=$(Rscript src/load-rasterconfig.R -a)
+rconf=(${rconf//;/ })
+climvars=(${rconf[0]//,/ })
+agglevels=(${rconf[1]//,/ })
 for climvar in ${climvars[@]}; do
     for agglevel in ${agglevels[@]}; do
         if [ -e "output/${climvar}-dailymean-${agglevel}-cleaned.RDS" ]; then

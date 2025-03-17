@@ -19,8 +19,9 @@ if (length(args) > 0) {
 if (!file.exists(sampledump)) {
   # cli_alert_danger(col_red("Dump file {sampledump} does not exist!"))
   # cli_alert_warning(col_yellow("Checking alternatives within output/..."))
-  measures <- c("temp", "spechumid", "relhumid", "uv", "precip")
-  agglevels <- c("countries", "GID1", "GID2", "UK-NUTS", "UK-LTLA", "UK-STP")
+  rconfig <- jsonlite::fromJSON("src/rasterconfig.json")
+  measures <- names(rconfig$rasterlookup)
+  agglevels <- rconfig$agglevels
 
   dumptypes <- expand.grid(agglevel=agglevels, measure=measures)
   for (i in 1:nrow(dumptypes)) {

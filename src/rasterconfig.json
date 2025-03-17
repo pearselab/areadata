@@ -1,0 +1,10 @@
+{
+    "rasterlookup": {
+        "temp": {"name": "reanalysis-era5-pressure-levels", "variable": "temperature", "source": "cds"},
+        "spechumid": {"name": "reanalysis-era5-pressure-levels", "variable": "specific_humidity", "source": "cds"},
+        "relhumid": {"name": "reanalysis-era5-pressure-levels", "variable": "relative_humidity", "source": "cds"},
+        "uv": {"name": "reanalysis-era5-single-levels", "variable": "downward_uv_radiation_at_the_surface", "source": "cds"},
+        "precip": {"name": "reanalysis-era5-single-levels", "variable": "total_precipitation", "source": "cds"}
+    },
+    "agglevels": ["countries", "GID1", "GID2", "UK-NUTS", "UK-LTLA", "UK-STP"]
+}

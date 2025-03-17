@@ -92,8 +92,10 @@ dump_concatenator <- function(dumps, metric, agglevel, outpath, allowdiscon = FA
   outname
 }
 
-measures <- c("temp", "spechumid", "relhumid", "uv", "precip")
-agglevels <- c("countries", "GID1", "GID2", "UK-NUTS", "UK-LTLA", "UK-STP")
+# Load measures & agglevels
+rconfig <- jsonlite::fromJSON("src/rasterconfig.json")
+measures <- names(rconfig$rasterlookup)
+agglevels <- rconfig$agglevels
 
 dumptypes <- expand.grid(agglevel=agglevels, measure=measures)
 
