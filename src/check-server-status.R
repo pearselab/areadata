@@ -11,9 +11,9 @@ df_entry <- subset(df, df$Title == "Data Stores")
 final_vec <- as.character(df_entry[1,])
 
 workcol <- col_yellow
-if (final_vec[3] == "OK") {
+if (tolower(final_vec[3]) == "ok") {
   workcol <- col_green
-} else if (final_vec[3] == "Down") {
+} else if (tolower(final_vec[3]) == "down") {
   workcol <- col_red
 }
 
