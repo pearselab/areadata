@@ -131,8 +131,9 @@ then
   echo "...Generating new hashes..."
   md5sum output/* > output/hashes
 
-  echo "... updating GID2 files on figshare ..."
-  python3 src/figshare-update.py
+#  echo "... updating GID2 files on figshare ..."
+#  python3 src/figshare-update.py
+# temporarily disabled - need to fix problems with the figshare API implementation
 
   echo ".. pushing changes to git"
   git add -A
